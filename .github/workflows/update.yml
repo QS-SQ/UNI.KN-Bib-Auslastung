@@ -57,6 +57,15 @@ jobs:
       - name: Run script
         run: python scripts/main.py
 
+      - name: Verify generated data
+        run: |
+          ls -lah docs/temp
+          wc -l docs/temp/*.csv
+          head -5 docs/temp/*.csv
+          
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
