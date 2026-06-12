@@ -4,6 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>UNI.KN Bibliothek Auslastung</title>
+  <link rel="icon" type="image/png" href="logo11.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0a7d3c">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="logo11.png">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Bib-Auslastung">
   <style>
     :root {
       color-scheme: light;
@@ -199,6 +207,24 @@
       gap: 16px;
     }
 
+    .kim-heading {
+      margin-bottom: 10px;
+    }
+    
+    .kim-heading-line {
+      display: inline-block;
+      background: #59c7eb;
+      color: #000;
+      font-weight: 900;
+      line-height: 1.15;
+      white-space: normal;
+    }
+    
+    .kim-heading-line.main {
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      padding: 6px 16px 10px;
+    }
+
     .legend-pill {
       display: flex;
       align-items: center;
@@ -216,6 +242,7 @@
       height: 10px;
       border-radius: 50%;
     }
+    
     .dot.green { background: var(--green); }
     .dot.yellow { background: var(--yellow); }
     .dot.orange { background: var(--orange); }
@@ -283,7 +310,9 @@
   <div class="page">
     <header class="hero">
       <p class="eyebrow">Universitätsbibliothek Konstanz</p>
-      <h1>Auslastung Buchbereiche B & J</h1>
+      <h1 class="kim-heading" aria-label="Auslastung Buchbereiche B & J">
+        <span class="kim-heading-line main">Auslastung Buchbereiche B &amp; J</span>
+      </h1>
     </header>
 
     <main class="content">
