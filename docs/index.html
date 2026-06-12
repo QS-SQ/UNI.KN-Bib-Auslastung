@@ -15,8 +15,8 @@
       --border: rgba(30, 41, 59, 0.08);
       --shadow: 0 20px 40px rgba(30, 41, 59, 0.05);
       --green: #10b981;
-      --yellow: #f59e0b;
-      --orange: #f97316;
+      --yellow: #f9e216;
+      --orange: #f59e0b;
       --red: #ef4444;
       --accent: #1e3a3a;
       --radius-xl: 24px;
@@ -314,39 +314,39 @@
 
       <div class="info-grid">
         <article class="info-card">
-          <h3><span>INFO</span> Infozentrum</h3>
+          <h3>Infozentrum</h3>
           <p>160 Arbeitsplätze im Infozentrum, Bibcafe und allen anderen Bereiche auf BA.</p>
         </article>
         <article class="info-card">
-          <h3><span>BHEA</span> Ebene BH2/BH3 </h3>
+          <h3>Ebene BH2/BH3 </h3>
           <p>62 Einzelarbeitsplätze auf den Ebenen BH2 und BH3.</p>
         </article>
         <article class="info-card">
-          <h3><span>BG23</span> Ebene BG2/BG3 </h3>
+          <h3>Ebene BG2/BG3 </h3>
           <p>85 Arbeitsplätze auf den Ebenen BG2 und BG3.</p>
         </article>
         <article class="info-card">
-          <h3><span>BG56</span> Ebene BG5/BG6 </h3>
+          <h3>Ebene BG5/BG6 </h3>
           <p>65 Einzelarbeitsplätze auf Ebene BG5 und BG6.</p>
         </article>
         <article class="info-card">
-          <h3><span>BSGA</span> Galerieplätze BS</h3>
+          <h3>Galerieplätze BS</h3>
           <p>165 Arbeitsplätze auf den Ebenen BS2 bis BS6 mit Ausnahme der Gruppenarbeitsräume auf BS5, den Arbeitsplätze in den Fluren von BS2/BS3 nach BG2/BG3 sowie an den großen Tischen auf BS3 Richtung Übergang BG3.</p>
         </article>
         <article class="info-card">
-          <h3><span>BSLS</span> Lesesaal</h3>
+          <h3>Lesesaal</h3>
           <p>59 Arbeitsplätze im Lesesaal auf BS6.</p>
         </article>
         <article class="info-card">
-          <h3><span>BSEA</span> Gruppentische BS2/BS3 </h3>
+          <h3>Gruppentische BS2/BS3 </h3>
           <p>90 Arbeitsplätze in den Fluren von BS2/BS3 nach BG2/BG3 sowie an den großen Tischen auf BS3 Richtung Übergang BG3.</p>
         </article>
         <article class="info-card">
-          <h3><span>JGAR</span> Gruppenarbeitsräume J</h3>
+          <h3>Gruppenarbeitsräume J</h3>
           <p>54 Gruppenarbeitsräume in J2-J6.</p>
         </article>
         <article class="info-card">
-          <h3><span>JEAP</span> Einzelarbeitsplätze J</h3>
+          <h3>Einzelarbeitsplätze J</h3>
           <p>140 Einzelarbeitsplätze in J2-J6.</p>
         </article>
       </div>
@@ -379,6 +379,19 @@
       'BSEA': 90,
       'JGAR': 54,
       'JEAP': 140
+    };
+
+    // Area Label Mapping for easier understanding of displayed information
+    const areaLabelMap = {
+      'INFO': 'Infozentrum',
+      'BHEA': 'Ebene BH2/BH3',
+      'BG23': 'Ebene BG2/BG3',
+      'BG56': 'Ebene BG5/BG6',
+      'BSGA': 'Galerieplätze BS',
+      'BSLS': 'Lesesaal',
+      'BSEA': 'Gruppentische BS2/BS3',
+      'JGAR': 'Gruppenarbeitsräume J',
+      'JEAP': 'Einzelarbeitsplätze J'
     };
 
     async function initDashboard() {
@@ -426,6 +439,7 @@
         // Generate matching elements
         for (const row of dataRows) {
           const totalSeats = capacityMap[row.key] || 100;
+          const displayLabel = areaLabelMap[row.key] || row.key;
 
           let barColor = 'var(--green)';
           if (row.percentage > 80) barColor = 'var(--red)';
@@ -435,7 +449,7 @@
           gridHtml += `
             <div class="status-card">
               <div class="card-header">
-                <span class="card-label">${row.key}</span>
+                <span class="card-label">${displayLabel}</span>
                 <span class="card-meta">Gesamt: ${totalSeats} Plätze</span>
               </div>
               <div class="progress-wrapper">
