@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>UNI.KN Bibliothek Auslastung</title>
+  <title>Bibliothek Auslastung</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     :root {
@@ -477,21 +477,37 @@
       const lwRaw = timeSeriesData.lw[key] || [];
       const tdRaw = timeSeriesData.td[key] || [];
 
-      const hourLabels = lwRaw.map(d => d.time.split(':')[0] + ':00');
+      // Hilfsfunktion: Extrahiert NUR die Stunde muss angepasst werden für höher frequentierte Daten
+      const getHour = (timeStr) => {
+        if (!timeStr) return '';
+        const parts = timeStr.trim().split(':');
+        return parts[0].padStart(2, '0');
+      };
+
+      const currentLiveHour = getHour(globalTimeString);
+      const hourLabels = lwRaw.map(d => getHour(d.time) + ':00');
 
       let lastValidIndex = -1;
       const todayData = lwRaw.map((d, index) => {
-        const entry = tdRaw.find(t => t.time === d.time);
-        if (entry && d.time <= globalTimeString) {
+        const lwHour = getHour(d.time);
+        
+        const entry = tdRaw.find(t => getHour(t.time) === lwHour);
+        
+        // Zeige Daten nur bis zur aktuellen Live-Uhrzeit an
+        if (entry && lwHour <= currentLiveHour) {
           lastValidIndex = index;
-          return entry.capacity;
+          const val = parseFloat(entry.capacity);
+          return isNaN(val) ? null : val;
         }
         return null;
       });
 
-      const lastWeekData = lwRaw.map(d => d.capacity);
+      const lastWeekData = lwRaw.map(d => {
+        const val = parseFloat(d.capacity);
+        return isNaN(val) ? null : val;
+      });
 
-      // Bestimme die Farbe für den finalen Punkt basierend auf dem letzten Wert
+      // Dynamische Punkt-Konfiguration
       let liveColor = '#1e3a3a'; 
       if (lastValidIndex !== -1) {
         const lastVal = todayData[lastValidIndex];
@@ -501,20 +517,22 @@
         else liveColor = '#10b981';
       }
 
-      // Arrays für Punkt-Konfiguration aufbauen (Standard überall 0, d.h. unsichtbar)
       const pointRadiusArray = new Array(todayData.length).fill(0);
       const pointHoverRadiusArray = new Array(todayData.length).fill(0);
       const pointBackgroundColorArray = new Array(todayData.length).fill('#1e3a3a');
       const pointBorderColorArray = new Array(todayData.length).fill('#ffffff');
       const pointBorderWidthArray = new Array(todayData.length).fill(0);
 
-      // Setze spezifische Styles NUR für den allerletzten Datenpunkt von heute
       if (lastValidIndex !== -1) {
         pointRadiusArray[lastValidIndex] = 5.5;
         pointHoverRadiusArray[lastValidIndex] = 5.5;
         pointBackgroundColorArray[lastValidIndex] = liveColor;
         pointBorderColorArray[lastValidIndex] = '#ffffff';
         pointBorderWidthArray[lastValidIndex] = 2;
+      }
+
+      if (activeCharts[key]) {
+        activeCharts[key].destroy();
       }
 
       activeCharts[key] = new Chart(ctx, {
@@ -529,8 +547,7 @@
               backgroundColor: '#1e3a3a',
               borderWidth: 2.5,
               tension: 0.15,
-              spanGaps: false,
-              // Zuweisung der dynamischen Punktkonfigurationen
+              spanGaps: true,
               pointRadius: pointRadiusArray,
               pointHoverRadius: pointHoverRadiusArray,
               pointBackgroundColor: pointBackgroundColorArray,
@@ -554,12 +571,7 @@
           responsive: true,
           maintainAspectRatio: false,
           hover: { mode: null },
-          layout: {
-            padding: {
-              left: 10,
-              right: 15
-            }
-          },
+          layout: { padding: { left: 10, right: 15 } },
           plugins: {
             legend: { display: true, position: 'top', labels: { boxWidth: 12, font: { size: 10 } } },
             tooltip: { enabled: false }
@@ -567,19 +579,13 @@
           scales: {
             y: {
               min: 0,
-              max: 1.02, // Reduziert den Freiraum oberhalb des Graphen auf exakt 102%
+              max: 1.02,
               ticks: { display: false }, 
               grid: { color: 'rgba(30, 41, 59, 0.04)' }
             },
             x: {
               grid: { display: false },
-              ticks: { 
-                maxRotation: 0, 
-                minRotation: 0, 
-                font: { size: 10 },
-                autoSkip: true,
-                maxTicksLimit: 8 
-              }
+              ticks: { maxRotation: 0, minRotation: 0, font: { size: 10 }, autoSkip: true, maxTicksLimit: 8 }
             }
           }
         }
