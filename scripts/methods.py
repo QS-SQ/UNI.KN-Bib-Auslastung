@@ -271,14 +271,14 @@ def save_as_csv(occupancy, path, time=None):
             f.write(f"timestamp,{time}\n")
     
         
-def process_serial_dfs(dfs, timestamps):
+def process_serial_dfs(dfs, df_timestamps):
     """
     Process dataframes for serial occupancy calculation by mapping router names to locations, 
     summing up user numbers, and calculating occupancy based on capacity.
     
     Args:        
         dfs (list): List of DataFrames containing the data from the CSV attachments.
-        timestamps (list): List of timestamps corresponding to each DataFrame.
+        df_timestamps (list): List of df_timestamps corresponding to each DataFrame.
         
     Returns:
         df_area (DataFrame): DataFrame containing the occupancy values for each area and time.
@@ -304,7 +304,6 @@ def process_serial_dfs(dfs, timestamps):
         return None, f'Error parsing tracking parameters: {e}'
     
     processed_dfs = []
-    
     for i, df in enumerate(dfs):
         if df is not None and not df.empty:
             df_copy = df.copy()
@@ -312,7 +311,7 @@ def process_serial_dfs(dfs, timestamps):
             df_copy["area"] = df_copy["AP Name"].map(location_map)
             
             # Add timestamps to the DataFrame
-            t_val = timestamps[i]
+            t_val = df_timestamps[i]
             df_copy["time"] = t_val.strftime("%H:%M") if isinstance(t_val, pd.Timestamp) else str(t_val)[:5]
             
             # Keep only operational slices

@@ -53,7 +53,7 @@ if flags_lw[1] == 'ok':
     if len(dfs_data_today) != len(timestamps_today) and len(dfs_data_today) > 0:
         flags_lw[2] = 'Error: Length of dfs_data_today and timestamps_today is zero or not the same'
     else:
-        df_today, flags_lw[2] = process_serial_dfs(dfs_data_today, timestamps)
+        df_today, flags_lw[2] = process_serial_dfs(dfs_data_today, timestamps_today)
     
 if flags_lw[2] == 'ok':
     path_lw = os.path.join(os.getcwd(), 'docs/temp/oc_values_lw.csv')
