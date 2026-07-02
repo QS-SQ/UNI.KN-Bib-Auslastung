@@ -134,6 +134,26 @@
       letter-spacing: -0.02em;
     }
 
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .panel-header-text {
+      display: grid;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .panel-logo {
+      height: 72px;
+      width: auto;
+      flex-shrink: 0;
+    }
+
     .dashboard-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -362,6 +382,7 @@
       .page { width: calc(100% - 24px); padding: 20px 0; }
       .hero, .panel { padding: 20px; }
       .compact-legend { display: none; }
+      .panel-logo { height: 52px; }
     }
   </style>
 </head>
@@ -378,10 +399,15 @@
 
     <main class="content">
       <section class="panel" aria-labelledby="live-heading">
-        <p class="eyebrow">Kommunikations-, Informations-, Medienzentrum (KIM)</p>
-        <h2 id="live-heading" class="hero-title" style="font-size: 1.5rem;">
-          <span class="highlight">Aktuelle Auslastung der Bibliotheksbereiche</span>
-        </h2>
+        <div class="panel-header">
+          <div class="panel-header-text">
+            <p class="eyebrow">Kommunikations-, Informations-, Medienzentrum (KIM)</p>
+            <h2 id="live-heading" class="hero-title" style="font-size: 1.5rem;">
+              <span class="highlight">Aktuelle Auslastung der Bibliotheksbereiche</span>
+            </h2>
+          </div>
+          <img src="logoUniKN.svg" alt="Universität Konstanz" class="panel-logo">
+        </div>
         
         <div id="live-dashboard" class="dashboard-grid">
           <p style="color: var(--muted);">Lade Live-Daten und Zeitreihen...</p>
@@ -409,7 +435,7 @@
         </div>
 
         <div class="card-info-text" id="methodik-info">
-          Die Daten werden einmal stündlich aktualisiert und geben eine Indikation, wie viele Arbeitsplätze in den einzelnen Bereichen belegt sind. Grün bedeutet überwiegend frei, danach folgen im Ampelsystem Gelb, Orange bis Rot, wobei Rot eine sehr hohe Auslastung anzeigt. Die nur von der Bibliothek aus zugänglichen Räume J213, BS217 und BG335 sind nicht in der Auslastung enthalten. Die Übersicht soll dabei helfen, schneller einen freien Platz zu finden und die Auslastung in den einzelnen Bereichen besser zu verteilen.
+          xyz
         </div>
       </section>
     </main>
