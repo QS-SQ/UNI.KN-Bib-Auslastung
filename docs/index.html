@@ -275,6 +275,13 @@
       border-top: 1px solid var(--border);
     }
 
+    .footer-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
     .chart-timestamp {
       font-size: 0.85rem;
       color: var(--muted);
@@ -290,6 +297,36 @@
       background: var(--green);
       border-radius: 50%;
       display: inline-block;
+    }
+
+    .methodik-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--muted);
+      background: var(--surface-strong);
+      padding: 6px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      font-family: inherit;
+      transition: color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .methodik-btn:hover {
+      color: var(--accent);
+      border-color: rgba(30, 58, 58, 0.25);
+    }
+
+    .methodik-btn svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    #methodik-info.visible {
+      max-height: 400px;
     }
 
     .compact-legend {
@@ -321,24 +358,6 @@
     .dot.orange { background: var(--orange); }
     .dot.red { background: var(--red); }
 
-    .section {
-      margin-top: 32px;
-    }
-
-    .method-box {
-      padding: 20px 22px;
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--border);
-      background: linear-gradient(135deg, rgba(30, 58, 58, 0.05), rgba(16, 185, 129, 0.03));
-      margin-top: 12px;
-    }
-
-    .method-box p {
-      margin: 0;
-      color: var(--text);
-      font-size: 0.95rem;
-    }
-
     @media (max-width: 640px) {
       .page { width: calc(100% - 24px); padding: 20px 0; }
       .hero, .panel { padding: 20px; }
@@ -369,7 +388,17 @@
         </div>
 
         <div class="meta-footer">
-          <div id="update-time" class="chart-timestamp">Aktualisiere...</div>
+          <div class="footer-left">
+            <div id="update-time" class="chart-timestamp">Aktualisiere...</div>
+            <button class="methodik-btn" onclick="toggleMethodik()" title="Methodik anzeigen" aria-label="Methodik anzeigen" aria-expanded="false" aria-controls="methodik-info">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+              </svg>
+              Methodik
+            </button>
+          </div>
           
           <div class="compact-legend" aria-label="Farblegende">
             <div class="legend-pill"><span class="dot green"></span> Geringe Auslastung </div>
@@ -378,22 +407,12 @@
             <div class="legend-pill"><span class="dot red"></span> Sehr starke Auslastung </div>
           </div>
         </div>
+
+        <div class="card-info-text" id="methodik-info">
+          Die Daten werden einmal stündlich aktualisiert und geben eine Indikation, wie viele Arbeitsplätze in den einzelnen Bereichen belegt sind. Grün bedeutet überwiegend frei, danach folgen im Ampelsystem Gelb, Orange bis Rot, wobei Rot eine sehr hohe Auslastung anzeigt. Die nur von der Bibliothek aus zugänglichen Räume J213, BS217 und BG335 sind nicht in der Auslastung enthalten. Die Übersicht soll dabei helfen, schneller einen freien Platz zu finden und die Auslastung in den einzelnen Bereichen besser zu verteilen.
+        </div>
       </section>
     </main>
-
-    <section class="section" aria-labelledby="method-heading">
-      <div class="section-heading">
-        <h2 id="method-heading">Methodik</h2>
-      </div>
-      <div class="method-box">
-        <p>
-          Die Daten werden einmal stündlich aktualisiert und geben eine Indikation, wie viele Arbeitsplätze in den einzelnen Bereichen belegt sind.
-          Grün bedeutet überwiegend frei, danach folgen im Ampelsystem Gelb, Orange bis Rot, wobei Rot eine sehr hohe Auslastung anzeigt.
-          Die nur von der Bibliothek aus zugänglichen Räume J213, BS217 und BG335 sind nicht in der Auslastung enthalten.
-          Die Übersicht soll dabei helfen, schneller einen freien Platz zu finden und die Auslastung in den einzelnen Bereichen besser zu verteilen.
-        </p>
-      </div>
-    </section>
   </div>
 
   <script>
@@ -450,6 +469,13 @@
     };
 
     Chart.register(leftColorBarPlugin);
+
+    function toggleMethodik() {
+      const info = document.getElementById('methodik-info');
+      info.classList.toggle('visible');
+      const btn = document.querySelector('.methodik-btn');
+      if (btn) btn.setAttribute('aria-expanded', info.classList.contains('visible'));
+    }
 
     function toggleInfo(key) {
       const chartCont = document.getElementById(`chart-cont-${key}`);
