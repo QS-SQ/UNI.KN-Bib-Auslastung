@@ -73,7 +73,7 @@
       border-radius: 999px;
       background: rgba(30, 58, 58, 0.08);
       color: var(--accent);
-      font-size: 0.8rem;
+      font-size: 0.7rem;
       font-weight: 700;
       letter-spacing: 0.05em;
       text-transform: uppercase;
@@ -87,20 +87,16 @@
       color: var(--accent);
     }
 
-    .hero-title {
-      font-size: 2.8125rem;
-      font-weight: 700;
-      word-wrap: break-word;
-      display: block;
-      color: #000;
-      font-family: "Theinhardt", sans-serif;
-      margin: 0;
-      padding: 0;
-      border: 0;
-      box-sizing: border-box;
-      -webkit-font-smoothing: antialiased;
-      text-rendering: optimizeLegibility;
-  }
+    .hero-title .highlight {
+        display: inline;
+        background-color: #59c7eb;
+        text-shadow: -2px -2px 0px #59c7eb, 2px -2px 0px #59c7eb;
+        line-height: initial;
+        box-decoration-break: clone;
+        -webkit-box-decoration-break: clone;
+        box-shadow: .5rem 0 0 #59c7eb, -0.5rem 0 0 #59c7eb;
+        margin-left: .5rem;   /* gleicht den linken box-shadow aus → bündig */
+    }
   
     .hero-title .highlight {
         display: inline;
@@ -129,7 +125,7 @@
 
     .panel h2, .section-heading h2 {
       margin: 0 0 24px;
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       font-weight: 700;
       letter-spacing: -0.02em;
     }
