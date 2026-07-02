@@ -88,24 +88,14 @@
     }
 
     .hero-title .highlight {
-        display: inline;
-        background-color: #59c7eb;
-        text-shadow: -2px -2px 0px #59c7eb, 2px -2px 0px #59c7eb;
-        line-height: initial;
-        box-decoration-break: clone;
-        -webkit-box-decoration-break: clone;
-        box-shadow: .5rem 0 0 #59c7eb, -0.5rem 0 0 #59c7eb;
-        margin-left: .5rem;   /* gleicht den linken box-shadow aus → bündig */
-    }
-  
-    .hero-title .highlight {
-        display: inline;
-        background-color: #59c7eb;
-        text-shadow: -2px -2px 0px #59c7eb, 2px -2px 0px #59c7eb;
-        line-height: initial;
-        box-decoration-break: clone;
-        -webkit-box-decoration-break: clone;
-        box-shadow: .5rem 0 0 #59c7eb, -0.5rem 0 0 #59c7eb;
+      display: inline;
+      background-color: #59c7eb;
+      text-shadow: -2px -2px 0px #59c7eb, 2px -2px 0px #59c7eb;
+      line-height: initial;
+      box-decoration-break: clone;
+      -webkit-box-decoration-break: clone;
+      box-shadow: .5rem 0 0 #59c7eb, -0.5rem 0 0 #59c7eb;
+      margin-left: .5rem; 
     }
 
     .content {
@@ -187,7 +177,7 @@
       line-height: 1.3;
       border-bottom: 2px solid #00a9e0;
       padding-bottom: 2px;
-      display: inline;              /* Unterstrich nur so breit wie der Text */
+      display: inline; 
       -webkit-font-smoothing: antialiased;
       text-rendering: optimizeLegibility;
     }
@@ -321,34 +311,11 @@
       display: inline-block;
     }
 
-    .methodik-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--muted);
-      background: var(--surface-strong);
-      padding: 6px 14px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      cursor: pointer;
-      font-family: inherit;
-      transition: color 0.2s ease, border-color 0.2s ease;
-    }
-
-    .methodik-btn:hover {
-      color: var(--accent);
-      border-color: rgba(30, 58, 58, 0.25);
-    }
-
-    .methodik-btn svg {
-      width: 15px;
-      height: 15px;
-    }
-
     #methodik-info.visible {
       max-height: 400px;
+      padding: 10px 14px;
+      margin-top: 10px;
+      border-width: 1px;
     }
 
     .compact-legend {
@@ -367,6 +334,13 @@
       padding: 6px 14px;
       border-radius: 999px;
       border: 1px solid var(--border);
+      cursor: pointer;
+      user-select: none;
+      transition: border-color 0.2s ease;
+    }
+
+    .legend-pill:hover {
+      border-color: rgba(30, 58, 58, 0.25);
     }
 
     .dot {
@@ -380,25 +354,32 @@
     .dot.orange { background: var(--orange); }
     .dot.red { background: var(--red); }
 
+    .hinweis-box {
+      margin-top: 20px;
+      padding: 14px 18px;
+      background: rgba(30, 58, 58, 0.04);
+      border-left: 4px solid var(--accent);
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+
+    .hinweis-title {
+      font-weight: 700;
+      color: var(--accent);
+      display: block;
+      margin-bottom: 4px;
+    }
+
     @media (max-width: 640px) {
       .page { width: calc(100% - 24px); padding: 20px 0; }
       .hero, .panel { padding: 20px; }
-      .compact-legend { display: none; }
       .panel-logo { height: 52px; }
     }
   </style>
 </head>
 <body>
   <div class="page">
-    <!--
-    <header class="hero">
-  <p class="eyebrow">Kommunikations-, Informations-, Medienzentrum (KIM)</p>
-  <h2 class="hero-title">
-     <span class="highlight">Auslastung der Bibliotheksbereiche BG, BS, J & Info-Zentrum</span> 
-  </h2>
-</header>
-    -->
-
     <main class="content">
       <section class="panel" aria-labelledby="live-heading">
         <div class="panel-header">
@@ -418,26 +399,24 @@
         <div class="meta-footer">
           <div class="footer-left">
             <div id="update-time" class="chart-timestamp">Aktualisiere...</div>
-            <button class="methodik-btn" onclick="toggleMethodik()" title="Methodik anzeigen" aria-label="Methodik anzeigen" aria-expanded="false" aria-controls="methodik-info">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"></circle>
-                <line x1="12" y1="16" x2="12" y2="12"></line>
-                <line x1="12" y1="8" x2="12.01" y2="8"></line>
-              </svg>
-              Methodik
-            </button>
           </div>
           
           <div class="compact-legend" aria-label="Farblegende">
-            <div class="legend-pill"><span class="dot green"></span> geringe Auslastung </div>
-            <div class="legend-pill"><span class="dot yellow"></span> moderate Auslastung </div>
-            <div class="legend-pill"><span class="dot orange"></span> starke Auslastung </div>
-            <div class="legend-pill"><span class="dot red"></span> sehr starke Auslastung </div>
+            <div class="legend-pill" onclick="toggleMethodik()"><span class="dot green"></span> geringe Auslastung </div>
+            <div class="legend-pill" onclick="toggleMethodik()"><span class="dot yellow"></span> moderate Auslastung </div>
+            <div class="legend-pill" onclick="toggleMethodik()"><span class="dot orange"></span> starke Auslastung </div>
+            <div class="legend-pill" onclick="toggleMethodik()"><span class="dot red"></span> sehr starke Auslastung </div>
           </div>
         </div>
 
         <div class="card-info-text" id="methodik-info">
-          Die Daten werden einmal stündlich aktualisiert und geben eine Indikation, wie viele Arbeitsplätze in den einzelnen Bereichen belegt sind. Grün bedeutet überwiegend frei, danach folgen im Ampelsystem Gelb, Orange bis Rot, wobei Rot eine sehr hohe Auslastung anzeigt. Die nur von der Bibliothek aus zugänglichen Räume J213, BS217 und BG335 sind nicht in der Auslastung enthalten. Die Übersicht soll dabei helfen, schneller einen freien Platz zu finden und die Auslastung in den einzelnen Bereichen besser zu verteilen.
+          Die Daten werden halbstündlich aktualisiert und geben eine Indikation, wie viele Arbeitsplätze in den einzelnen Bereichen belegt sind. Grün bedeutet überwiegend frei, danach folgen im Ampelsystem Gelb, Orange bis Rot, wobei Rot eine sehr hohe Auslastung anzeigt. Die nur von der Bibliothek aus zugänglichen Seminarräume J213, BS217 und BG335 sind nicht in der Auslastung enthalten. Die Übersicht soll dabei helfen, schneller einen freien Platz zu finden und die Auslastung in den einzelnen Bereichen besser zu verteilen.
+        </div>
+
+        <div class="hinweis-box">
+          <!-- <span class="hinweis-title">Hinweis:</span> -->
+          In der N-Bibliothek gibt es weitere 100 Arbeitsplätze.<br>
+          Öffnungszeiten N: Mo. – Fr.: 8:00 - 17:30 Uhr (Aug. + Sept. 8:00 - 16:30 Uhr)
         </div>
       </section>
     </main>
@@ -474,7 +453,7 @@
         const y40 = yScale.getPixelForValue(0.4);
         const y60 = yScale.getPixelForValue(0.6);
         const y80 = yScale.getPixelForValue(0.8);
-        const y100 = yScale.getPixelForValue(1.0);
+        const y100 = yScale.getPixelForValue(1.027);
 
         ctx.save();
         const barWidth = 8; 
@@ -501,8 +480,6 @@
     function toggleMethodik() {
       const info = document.getElementById('methodik-info');
       info.classList.toggle('visible');
-      const btn = document.querySelector('.methodik-btn');
-      if (btn) btn.setAttribute('aria-expanded', info.classList.contains('visible'));
     }
 
     function toggleInfo(key) {
@@ -564,24 +541,30 @@
       const lwRaw = timeSeriesData.lw[key] || [];
       const tdRaw = timeSeriesData.td[key] || [];
 
-      // Hilfsfunktion: Extrahiert NUR die Stunde muss angepasst werden für höher frequentierte Daten
-      const getHour = (timeStr) => {
+      const getTimeBucket = (timeStr) => {
         if (!timeStr) return '';
         const parts = timeStr.trim().split(':');
-        return parts[0].padStart(2, '0');
+        const hour = parts[0].padStart(2, '0');
+        const minutes = parseInt(parts[1] || '0', 10);
+        const bucketMinutes = minutes < 15 || minutes >= 45 ? '00' : '30';
+        
+        let normalizedHour = hour;
+        if (minutes >= 45) {
+          let nextHour = parseInt(hour, 10) + 1;
+          normalizedHour = String(nextHour).padStart(2, '0');
+        }
+        return `${normalizedHour}:${bucketMinutes}`;
       };
 
-      const currentLiveHour = getHour(globalTimeString);
-      const hourLabels = lwRaw.map(d => getHour(d.time) + ':00');
+      const currentLiveBucket = getTimeBucket(globalTimeString);
+      const hourLabels = lwRaw.map(d => getTimeBucket(d.time));
 
       let lastValidIndex = -1;
       const todayData = lwRaw.map((d, index) => {
-        const lwHour = getHour(d.time);
+        const lwBucket = getTimeBucket(d.time);
+        const entry = tdRaw.find(t => getTimeBucket(t.time) === lwBucket);
         
-        const entry = tdRaw.find(t => getHour(t.time) === lwHour);
-        
-        // Zeige Daten nur bis zur aktuellen Live-Uhrzeit an
-        if (entry && lwHour <= currentLiveHour) {
+        if (entry && lwBucket <= currentLiveBucket) {
           lastValidIndex = index;
           const val = parseFloat(entry.capacity);
           return isNaN(val) ? null : val;
@@ -594,7 +577,6 @@
         return isNaN(val) ? null : val;
       });
 
-      // Dynamische Punkt-Konfiguration
       let liveColor = '#1e3a3a'; 
       if (lastValidIndex !== -1) {
         const lastVal = todayData[lastValidIndex];
@@ -666,13 +648,13 @@
           scales: {
             y: {
               min: 0,
-              max: 1.02,
+              max: 1.027,
               ticks: { display: false }, 
               grid: { color: 'rgba(30, 41, 59, 0.04)' }
             },
             x: {
               grid: { display: false },
-              ticks: { maxRotation: 0, minRotation: 0, font: { size: 10 }, autoSkip: true, maxTicksLimit: 8 }
+              ticks: { maxRotation: 0, minRotation: 0, font: { size: 10 }, autoSkip: true, maxTicksLimit: 12 }
             }
           }
         }
