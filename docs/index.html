@@ -9,914 +9,655 @@
   <style>
     :root {
       color-scheme: light;
-      --bg: #f4f6f8;
-      --surface: rgba(255, 255, 255, 0.85);
-      --surface-strong: #ffffff;
-      --text: #1e293b;
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --text: #0f172a;
       --muted: #64748b;
-      --border: rgba(30, 41, 59, 0.08);
-      --shadow: 0 20px 40px rgba(30, 41, 59, 0.05);
+      --border: #e2e8f0;
+      --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
       --green: #10b981;
-      --yellow: #f9e216;
-      --orange: #f59e0b;
+      --yellow: #eab308;
+      --orange: #f97316;
       --red: #ef4444;
-      --accent: #1e3a3a;
-      --radius-xl: 24px;
+      --accent: #0f172a;
       --radius-lg: 16px;
       --radius-md: 12px;
     }
 
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      background:
-        radial-gradient(circle at top left, rgba(16, 185, 129, 0.08), transparent 40%),
-        radial-gradient(circle at right top, rgba(30, 58, 58, 0.06), transparent 35%),
-        var(--bg);
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      margin: 0;
-      min-height: 100vh;
+      background-color: var(--bg);
       color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       line-height: 1.5;
       -webkit-font-smoothing: antialiased;
+      padding: 24px 16px;
     }
 
-    .page {
-      width: min(1200px, calc(100% - 32px));
+    .container {
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 40px 0;
+      display: grid;
+      gap: 24px;
     }
 
-    .hero {
-      display: grid;
-      gap: 12px;
-      padding: 32px;
+    .header-panel {
+      background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: var(--radius-xl);
-      background: rgba(255, 255, 255, 0.7);
-      backdrop-filter: blur(20px);
+      border-radius: var(--radius-lg);
+      padding: 24px;
       box-shadow: var(--shadow);
-      margin-bottom: 32px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: center;
     }
 
     .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      width: fit-content;
-      margin: 0;
-      padding: 6px 12px;
-      border-radius: 999px;
-      background: rgba(30, 58, 58, 0.08);
-      color: var(--accent);
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 0.05em;
+      font-size: 0.75rem;
+      font-weight: 600;
       text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      margin-bottom: 4px;
     }
 
-    h4 {
-      margin: 0;
-      font-size: clamp(1.8rem, 4vw, 2.8rem);
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      color: var(--accent);
-    }
-
-    .hero-title .highlight {
-      display: inline;
-      background-color: #59c7eb;
-      text-shadow: -2px -2px 0px #59c7eb, 2px -2px 0px #59c7eb, -2px 2px 0px #59c7eb, 2px 2px 0px #59c7eb;
-      line-height: initial;
-      box-decoration-break: clone;
-      -webkit-box-decoration-break: clone;
-      box-shadow: .5rem 0 0 #59c7eb, -0.5rem 0 0 #59c7eb;
-      margin-left: .5rem; 
-    }
-
-    .content {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 32px;
-    }
-
-    .panel {
-      border: 1px solid var(--border);
-      border-radius: var(--radius-xl);
-      background: var(--surface);
-      backdrop-filter: blur(16px);
-      box-shadow: var(--shadow);
-      padding: 32px;
-    }
-
-    .panel h2, .section-heading h2 {
-      margin: 0 0 24px;
-      font-size: 1.4rem;
+    .title-wrapper h1 {
+      font-size: 1.5rem;
       font-weight: 700;
       letter-spacing: -0.02em;
-    }
-
-    .panel-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 16px;
       margin-bottom: 16px;
     }
 
-    .panel-header-text {
-      display: grid;
-      gap: 12px;
-      min-width: 0;
+    .title-underline {
+      display: inline-block;
+      border-bottom: 3px solid #00a9e0;
+      padding-bottom: 4px;
     }
 
-    .panel-logo {
-      height: 72px;
-      width: auto;
-      flex-shrink: 0;
+    .global-status {
+      background: #f1f5f9;
+      border-radius: var(--radius-md);
+      padding: 16px;
+      min-width: 280px;
+    }
+
+    .global-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .header-right-meta {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 12px;
+    }
+
+    .panel-logo { height: 48px; width: auto; }
+
+    .controls-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 4px;
+    }
+
+    .sort-btn, .methodik-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 14px;
+      border-radius: var(--radius-md);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .sort-btn:hover, .methodik-btn:hover {
+      background: #f8fafc;
+      border-color: var(--muted);
     }
 
     .dashboard-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
       gap: 20px;
     }
 
-    .status-card {
-      background: var(--surface-strong);
+    .card {
+      background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
       padding: 20px;
+      box-shadow: var(--shadow);
       display: flex;
       flex-direction: column;
-      position: relative;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      transition: transform 0.2s, box-shadow 0.2s;
     }
 
-    .status-card:hover {
+    .card:hover {
       transform: translateY(-2px);
-      box-shadow: 0 12px 24px rgba(30, 41, 59, 0.04);
+      box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.05);
     }
 
-    .card-header {
+    .card-top {
       display: flex;
+      justify-content: space-between;
       align-items: flex-start;
-      margin-bottom: 12px;
-      padding-right: 56px;
+      margin-bottom: 14px;
     }
 
-    .card-label {
-      font-family: "Theinhardt", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      font-size: 1.1rem;
-      font-weight: 500;
-      color: #000;
-      line-height: 1.3;
+    .card-title {
+      font-size: 1rem;
+      font-weight: 600;
+      max-width: 65%;
+    }
+
+    .card-title span {
       border-bottom: 2px solid #00a9e0;
       padding-bottom: 2px;
-      display: inline; 
-      -webkit-font-smoothing: antialiased;
-      text-rendering: optimizeLegibility;
     }
 
     .card-controls {
-      position: absolute;
-      top: 20px;
-      right: 20px;
       display: flex;
-      gap: 10px;
-      align-items: center;
+      gap: 6px;
     }
 
     .action-btn {
-      background: none;
+      background: #f1f5f9;
       border: none;
-      padding: 0;
-      cursor: pointer;
       color: var(--muted);
+      padding: 6px;
+      border-radius: 8px;
+      cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      transition: color 0.2s ease, transform 0.2s ease;
-      border-radius: 50%;
+      transition: all 0.2s;
     }
 
     .action-btn:hover {
-      color: var(--accent);
-      transform: scale(1.1);
+      background: var(--accent);
+      color: #fff;
     }
 
     .action-btn svg {
-      width: 18px;
-      height: 18px;
+      width: 16px;
+      height: 16px;
     }
 
-    .card-meta {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--muted);
-      margin-top: 8px;
-      display: block;
-    }
-
-    .progress-wrapper {
-      position: relative;
-      width: 100%;
-      margin-bottom: 12px;
-    }
-
+    .progress-container { margin-bottom: 14px; }
     .progress-track {
-      height: 12px;
+      height: 8px;
       background: #e2e8f0;
       border-radius: 999px;
       overflow: hidden;
     }
-
     .progress-bar {
       height: 100%;
       width: 0%;
       border-radius: 999px;
-      transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    .card-info-text, .card-chart-container {
-      font-size: 0.85rem;
+    .card-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
       color: var(--muted);
-      background: var(--bg);
-      padding: 0;
-      margin-top: 0;
-      margin-bottom: 0;
-      border-radius: var(--radius-md);
-      border: 0 solid var(--border);
+      font-weight: 500;
+    }
+
+    /* Separate Ausklapp-Bereiche für Info und Chart */
+    .card-info-text, .card-chart-container {
       max-height: 0;
       overflow: hidden;
-      transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s ease, margin 0.3s ease, border-width 0.1s ease;
+      transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), margin-top 0.3s ease, padding-top 0.3s ease;
+      font-size: 0.8rem;
+      color: var(--muted);
     }
 
     .card-info-text.visible {
-      max-height: 150px; 
-      padding: 10px 14px;
-      margin-top: 10px;
-      margin-bottom: 10px;
-      border-width: 1px;
+      max-height: 120px;
+      border-top: 1px solid var(--border);
+      margin-top: 14px;
+      padding-top: 14px;
     }
 
     .card-chart-container.visible {
-      max-height: 280px;
-      padding: 12px;
-      margin-top: 10px;
-      margin-bottom: 10px;
-      border-width: 1px;
+      max-height: 240px;
+      border-top: 1px solid var(--border);
+      margin-top: 14px;
+      padding-top: 14px;
     }
 
     .chart-layout-wrapper {
-      width: 100%;
-      height: 230px;
+      height: 180px;
       position: relative;
+      width: 100%;
     }
 
-    .meta-footer {
+    .trend-box { display: flex; align-items: center; gap: 4px; font-weight: 700; }
+    .trend-box.up { color: var(--red); }
+    .trend-box.down { color: var(--green); }
+    .trend-box.neutral { color: var(--muted); }
+
+    .footer-panel {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 24px;
-      padding-top: 16px;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding-top: 12px;
       border-top: 1px solid var(--border);
     }
 
-    .footer-left {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-
-    .chart-timestamp {
+    .timestamp {
       font-size: 0.85rem;
       color: var(--muted);
+      font-weight: 500;
+    }
+
+    .legend { display: flex; gap: 16px; flex-wrap: wrap; }
+    .legend-item {
       display: flex;
       align-items: center;
       gap: 6px;
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-weight: 500;
     }
+    .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
 
-    .chart-timestamp::before {
-      content: "";
-      width: 8px;
-      height: 8px;
-      background: var(--green);
-      border-radius: 50%;
-      display: inline-block;
-    }
-
-    #methodik-info.visible {
-      max-height: 400px;
-      padding: 14px;
-      margin-top: 20px;
-      border-width: 1px;
-    }
-
-    .compact-legend {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-    }
-
-    .legend-pill {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      background: var(--surface-strong);
-      padding: 6px 14px;
-      border-radius: 999px;
+    #methodik-info {
+      background: var(--surface);
       border: 1px solid var(--border);
-      user-select: none;
-    }
-
-    .dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-    }
-    
-    .dot.green { background: var(--green); }
-    .dot.yellow { background: var(--yellow); }
-    .dot.orange { background: var(--orange); }
-    .dot.red { background: var(--red); }
-
-    /* Layout unten mit Hinweis links und Button rechtsbündig */
-    .bottom-layout {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-      margin-top: 20px;
-    }
-
-    .hinweis-box {
-      flex: 1;
-      padding: 10px 14px;
-      background: rgba(30, 58, 58, 0.04);
       border-radius: var(--radius-md);
-      font-size: 0.9rem;
-      color: var(--text);
-    }
-
-    .hinweis-title {
-      font-weight: 700;
-      color: var(--accent);
-      display: block;
-      margin-bottom: 2px;
-    }
-
-    /* Originaler Methodik-Button mit Icon */
-    .methodik-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--surface-strong);
-      color: var(--accent);
-      border: 1px solid var(--border);
-      padding: 10px 18px;
-      border-radius: var(--radius-md);
+      padding: 16px;
       font-size: 0.85rem;
-      font-weight: 600;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.1s ease;
-      box-shadow: 0 2px 4px rgba(30, 41, 59, 0.02);
-    }
-
-    .methodik-btn:hover {
-      border-color: rgba(30, 58, 58, 0.25);
-      background-color: var(--bg);
-    }
-
-    .methodik-btn:active {
-      transform: scale(0.98);
-    }
-
-    .methodik-btn svg {
-      width: 16px;
-      height: 16px;
-      color: var(--accent);
+      color: var(--muted);
+      display: none;
+      box-shadow: var(--shadow);
     }
 
     @media (max-width: 768px) {
-      .bottom-layout {
-        flex-direction: column;
-        align-items: stretch;
-      }
-      .methodik-btn {
-        justify-content: center;
-      }
-    }
-
-    @media (max-width: 640px) {
-      .page { width: calc(100% - 24px); padding: 20px 0; }
-      .hero, .panel { padding: 20px; }
-      .panel-logo { height: 52px; }
+      .header-panel { grid-template-columns: 1fr; }
+      .header-right-meta { align-items: flex-start; }
+      .global-status { min-width: 100%; }
+      .footer-panel { flex-direction: column; align-items: flex-start; }
     }
   </style>
 </head>
 <body>
-  <div class="page">
-    <main class="content">
-      <section class="panel" aria-labelledby="live-heading">
-        <div class="panel-header">
-          <div class="panel-header-text">
-            <p class="eyebrow">Kommunikations-, Informations-, Medienzentrum (KIM)</p>
-            <h2 id="live-heading" class="hero-title" style="font-size: 1.5rem;">
-              <span class="highlight">Aktuelle Auslastung der Bibliothek</span>
-            </h2>
-          </div>
-          <img src="logoUniKN.svg" alt="Universität Konstanz" class="panel-logo">
-        </div>
+
+  <div class="container">
+    
+    <header class="header-panel">
+      <div class="title-wrapper">
+        <p class="eyebrow">KIM • Universität Konstanz</p>
+        <h1><span class="title-underline">Auslastung der Bibliothek</span></h1>
         
-        <div id="live-dashboard" class="dashboard-grid">
-          <p style="color: var(--muted);">Lade Live-Daten und Zeitreihen...</p>
-        </div>
-
-        <div class="meta-footer">
-          <div class="footer-left">
-            <div id="update-time" class="chart-timestamp">Aktualisiere...</div>
+        <div class="global-status">
+          <div class="global-info">
+            <span>Gesamtauslastung</span>
+            <div id="total-trend" class="trend-box neutral">--</div>
           </div>
-          
-          <div class="compact-legend" aria-label="Farblegende">
-            <div class="legend-pill" id="pill-green"><span class="dot green"></span> geringe Auslastung </div>
-            <div class="legend-pill"><span class="dot yellow"></span> moderate Auslastung </div>
-            <div class="legend-pill"><span class="dot orange"></span> starke Auslastung </div>
-            <div class="legend-pill"><span class="dot red"></span> sehr starke Auslastung </div>
+          <div class="progress-track" style="height: 6px; margin-bottom: 6px;">
+            <div id="total-bar" class="progress-bar"></div>
           </div>
         </div>
+      </div>
 
-        <div class="bottom-layout">
-          <div class="hinweis-box">
-            <!-- <span class="hinweis-title">Hinweis:</span> -->
-            In der N-Bibliothek gibt es weitere 100 Arbeitsplätze.<br>
-            Öffnungszeiten N: Mo. – Fr.: 8 - 17:30 Uhr (Aug. + Sept. 8 - 16:30 Uhr)
-          </div>
-          <button class="methodik-btn" onclick="toggleMethodik()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="12" y1="16" x2="12" y2="12"></line>
-              <line x1="12" y1="8" x2="12.01" y2="8"></line>
-            </svg>
-            Methodik
-          </button>
+      <div class="header-right-meta">
+        <img src="logoUniKN.svg" alt="Logo" class="panel-logo">
+        <div class="controls-row">
+          <button id="sort-button" class="sort-btn" onclick="cycleSort()">Sortierung: Standard</button>
         </div>
+      </div>
+    </header>
 
-        <div class="card-info-text" id="methodik-info">
-          Die Daten werden einmal stündlich aktualisiert und geben eine Indikation, wie viele Arbeitsplätze in den einzelnen Bereichen belegt sind. Grün bedeutet überwiegend frei, danach folgen im Ampelsystem Gelb, Orange bis Rot, wobei Rot eine sehr hohe Auslastung anzeigt. Die nur von der Bibliothek aus zugänglichen Räume J213, BS217 und BG335 sind nicht in der Auslastung enthalten. Die Übersicht soll dabei helfen, schneller einen freien Platz zu finden und die Auslastung in den einzelnen Bereichen besser zu verteilen.
-        </div>
-      </section>
+    <main id="live-dashboard" class="dashboard-grid">
+      <p style="color: var(--muted); padding: 12px;">Lade Daten...</p>
     </main>
+
+    <footer class="footer-panel">
+      <div id="update-time" class="timestamp">Aktualisiere...</div>
+      
+      <div class="legend">
+        <div class="legend-item"><span class="dot" style="background: var(--green)"></span> Gering</div>
+        <div class="legend-item"><span class="dot" style="background: var(--yellow)"></span> Moderat</div>
+        <div class="legend-item"><span class="dot" style="background: var(--orange)"></span> Stark</div>
+        <div class="legend-item"><span class="dot" style="background: var(--red)"></span> Sehr stark</div>
+        <button class="methodik-btn" style="padding: 4px 10px; font-size: 0.75rem;" onclick="toggleMethodik()">Methodik</button>
+      </div>
+    </footer>
+
+    <div id="methodik-info">
+      Die Daten werden stündlich aktualisiert. Die berechneten Werte indizieren die Platzbelegung der einzelnen Bereiche im Ampelsystem. Räume wie J213, BS217 und BG335 sind exkludiert.
+    </div>
+
+    <div style="font-size: 0.85rem; color: var(--muted); background: #f1f5f9; padding: 12px 16px; border-radius: var(--radius-md); border-left: 4px solid #00a9e0;">
+      <strong>Hinweis zur N-Bibliothek:</strong> Dort stehen weitere 100 Arbeitsplätze bereit. Öffnungszeiten N: Mo.–Fr. 8:00–17:30 Uhr (Aug./Sept. bis 16:30 Uhr).
+    </div>
+
   </div>
 
   <script>
-    const capacityMap = {
-      'BSGA': 165, 'JEAP': 140,  'JGAR': 180, 'BSEA': 90, 'BSBG': 25, 'BSLS': 59, 'BG23': 85, 'BG56': 65, 'INFO': 160
-    };
+    const capacityMap = { 'BSGA': 165, 'JEAP': 140, 'JGAR': 180, 'BSEA': 90, 'BSBG': 25, 'BSLS': 59, 'BG23': 85, 'BG56': 65, 'INFO': 160 };
+    const orderKeys = ['INFO', 'BG23', 'BG56', 'BSLS', 'BSBG', 'BSEA', 'BSGA', 'JGAR', 'JEAP'];
+    const areaLabelMap = { 'INFO': 'Info-Zentrum', 'BG23': 'Ebenen BG2/BG3', 'BG56': 'Ebenen BG5/BG6', 'BSLS': 'Lesesaal (BS6-BG6)', 'BSBG': 'Übergang BS5-BG5', 'BSEA': 'Übergang BS2/3-BG2/3', 'BSGA': 'Buchbereich BS', 'JGAR': 'Arbeitsräume J', 'JEAP': 'Einzelarbeitsplätze J' };
+    const areaDescriptionMap = { 'INFO': '160 Arbeitsplätze im Infozentrum, Bibcafe und allen anderen Bereiche auf BA.', 'BG23': '145 Arbeitsplätze auf den Ebenen BG2/BG3 und BH2/BH3.', 'BG56': '65 Einzelarbeitsplätze auf Ebene BG5 und Ebene BG6.', 'BSLS': '59 Arbeitsplätze im Lesesaal im Übergang von BS6 nach BG6.', 'BSBG': '5 Gruppenarbeitsräume im Übergang von BS5 nach BG5.', 'BSEA': '90 Arbeitsplätze in den Fluren von BS2/BS3 nach BG2/BG3 sowie an den großen Tischen auf BS3 Richtung Übergang BG3.', 'BSGA': '165 Arbeitsplätze auf den Ebenen BS2 bis BS6 (exkl. Sonderräume).', 'JGAR': '54 Arbeitsräume in J2-J6.', 'JEAP': '140 Einzelarbeitsplätze in J2-J6.' };
 
-    const areaLabelMap = {
-      'INFO': 'Info-Zentrum', 'BG23': 'Ebenen BG2/BG3', 'BG56': 'Ebenen BG5/BG6', 'BSLS': 'Lesesaal (Übergang BS6 nach BG6)', 'BSBG': 'Übergang BS5 nach BG5', 'BSEA': 'Übergang BS2/3 nach BG2/3', 'BSGA': 'Buchbereich BS', 'JGAR': 'Arbeitsräume J', 'JEAP': 'Einzelarbeitsplätze J'
-    };
-
-    const areaDescriptionMap = {
-      'INFO': '160 Arbeitsplätze im Infozentrum, Bibcafe und allen anderen Bereiche auf BA.', 'BG23': '145 Arbeitsplätze auf den Ebenen BG2/BG3 und BH2/BH3.', 'BG56': '65 Einzelarbeitsplätze auf Ebene BG5 und Ebene BG6.', 'BSLS': '59 Arbeitsplätze im Lesesaal im Übergang von BS6 nach BG6.', 'BSBG': '5 Gruppenarbeitsräume im Übergang von BS5 nach BG5.', 'BSEA': '90 Arbeitsplätze in den Fluren von BS2/BS3 nach BG2/BG3 sowie an den großen Tischen auf BS3 Richtung Übergang BG3.', 'BSGA': '165 Arbeitsplätze auf den Ebenen BS2 bis BS6 mit Ausnahme der Gruppenarbeitsräume auf BS5, den Arbeitsplätze in den Fluren von BS2/BS3 nach BG2/BG3 sowie an den großen Tischen auf BS3 Richtung Übergang BG3.', 'JGAR': '54 Arbeitsräume in J2-J6.', 'JEAP': '140 Einzelarbeitsplätze in J2-J6.'
-    };
-
-    const seatroomMap = {
-      'INFO': 'Plätze', 'BG23': 'Plätze', 'BG56': 'Plätze', 'BSLS': 'Plätze', 'BSBG': 'Plätze', 'BSEA': 'Plätze', 'BSGA': 'Plätze', 'JGAR': 'Plätze', 'JEAP': 'Plätze'
-    };
-
+    let currentSortMode = 'default';
     let timeSeriesData = { lw: {}, td: {} };
     let activeCharts = {};
-    let globalTimeString = "12:00"; 
+    let globalTimeString = "12:00";
+    let cachedDataRows = [];
 
+    // Original Left Color Bar Plugin für die Charts
     const leftColorBarPlugin = {
       id: 'leftColorBar',
       beforeDraw(chart) {
         const { ctx, chartArea: { left } } = chart;
         const yScale = chart.scales.y;
-        
         const y0 = yScale.getPixelForValue(0);
         const y40 = yScale.getPixelForValue(0.4);
         const y60 = yScale.getPixelForValue(0.6);
         const y80 = yScale.getPixelForValue(0.8);
-        const y100 = yScale.getPixelForValue(1.027);
+        const y100 = yScale.getPixelForValue(1.0);
 
         ctx.save();
-        const barWidth = 8; 
-        const barLeft = left + 4;
-
-        ctx.fillStyle = '#10b981';
-        ctx.fillRect(barLeft, y40, barWidth, y0 - y40);
-
-        ctx.fillStyle = '#f9e216';
-        ctx.fillRect(barLeft, y60, barWidth, y40 - y60);
-
-        ctx.fillStyle = '#f59e0b';
-        ctx.fillRect(barLeft, y80, barWidth, y60 - y80);
-
-        ctx.fillStyle = '#ef4444';
-        ctx.fillRect(barLeft, y100, barWidth, y80 - y100);
-
+        const barWidth = 6; 
+        const barLeft = left + 2;
+        ctx.fillStyle = '#10b981'; ctx.fillRect(barLeft, y40, barWidth, y0 - y40);
+        ctx.fillStyle = '#eab308'; ctx.fillRect(barLeft, y60, barWidth, y40 - y60);
+        ctx.fillStyle = '#f97316'; ctx.fillRect(barLeft, y80, barWidth, y60 - y80);
+        ctx.fillStyle = '#ef4444'; ctx.fillRect(barLeft, y100, barWidth, y80 - y100);
         ctx.restore();
       }
     };
-
     Chart.register(leftColorBarPlugin);
 
     function toggleMethodik() {
-      const info = document.getElementById('methodik-info');
-      info.classList.toggle('visible');
+      const el = document.getElementById('methodik-info');
+      el.style.display = el.style.display === 'block' ? 'none' : 'block';
     }
 
     function toggleInfo(key) {
-      const chartCont = document.getElementById(`chart-cont-${key}`);
-      if (chartCont && chartCont.classList.contains('visible')) {
-        chartCont.classList.remove('visible');
-      }
-      const infoText = document.getElementById(`info-${key}`);
-      if (infoText) infoText.classList.toggle('visible');
+      document.getElementById(`chart-cont-${key}`)?.classList.remove('visible');
+      document.getElementById(`info-${key}`)?.classList.toggle('visible');
     }
 
     function toggleChart(key) {
-      const infoText = document.getElementById(`info-${key}`);
-      if (infoText && infoText.classList.contains('visible')) {
-        infoText.classList.remove('visible');
+      document.getElementById(`info-${key}`)?.classList.remove('visible');
+      const container = document.getElementById(`chart-cont-${key}`);
+      if (!container) return;
+      
+      container.classList.toggle('visible');
+      if (container.classList.contains('visible')) {
+        setTimeout(() => { buildAreaChart(key); }, 50);
       }
+    }
 
-      const chartCont = document.getElementById(`chart-cont-${key}`);
-      if (!chartCont) return;
+    const getTimeBucket = (timeStr) => {
+      if (!timeStr) return '';
+      const parts = timeStr.trim().split(':');
+      const hour = parts[0].padStart(2, '0');
+      const minutes = parseInt(parts[1] || '0', 10);
+      const bucketMinutes = minutes < 15 || minutes >= 45 ? '00' : '30';
+      return `${minutes >= 45 ? String(parseInt(hour, 10) + 1).padStart(2, '0') : hour}:${bucketMinutes}`;
+    };
 
-      chartCont.classList.toggle('visible');
-
-      if (chartCont.classList.contains('visible')) {
-        if (activeCharts[key]) {
-          activeCharts[key].resize();
-          activeCharts[key].update();
-        } else {
-          buildAreaChart(key);
-        }
-      }
+    function getColor(pct) {
+      if (pct > 80) return 'var(--red)';
+      if (pct > 60) return 'var(--orange)';
+      if (pct > 40) return 'var(--yellow)';
+      return 'var(--green)';
     }
 
     async function parseCSVFile(url) {
       const response = await fetch(url);
       if (!response.ok) return {};
       const text = await response.text();
-      const lines = text.trim().split('\n');
       const result = {};
-
-      for (let line of lines) {
-        line = line.trim();
-        if (!line || line.toLowerCase().startsWith('area')) continue;
-        const delimiter = line.includes(';') ? ';' : ',';
-        const parts = line.split(delimiter);
-        if (parts.length < 3) continue;
-
+      text.split('\n').forEach(line => {
+        if (!line.trim() || line.toLowerCase().startsWith('area')) return;
+        const parts = line.split(line.includes(';') ? ';' : ',');
+        if (parts.length < 3) return;
         const area = parts[0].trim();
-        const time = parts[1].trim();
-        const capacity = parseFloat(parts[2].trim());
-
         if (!result[area]) result[area] = [];
-        result[area].push({ time, capacity });
-      }
+        result[area].push({ time: parts[1].trim(), capacity: parseFloat(parts[2].trim()) });
+      });
       return result;
     }
 
+    function calculateTotal(usePast = false, pastBucket = '') {
+      let totalCap = 0, weightedPct = 0;
+      cachedDataRows.forEach(row => {
+        const cap = capacityMap[row.key];
+        if (!cap) return;
+        let pct = row.percentage;
+        if (usePast && pastBucket && timeSeriesData.td[row.key]) {
+          const entry = timeSeriesData.td[row.key].find(t => getTimeBucket(t.time) === pastBucket);
+          if (entry) pct = parseFloat(entry.capacity) * 100;
+        }
+        totalCap += cap;
+        weightedPct += (pct * cap);
+      });
+      return { percentage: totalCap ? weightedPct / totalCap : 0, capacity: totalCap };
+    }
+
+    function renderDashboard() {
+      const grid = document.getElementById('live-dashboard');
+      const currentBucket = getTimeBucket(globalTimeString);
+      
+      const totalLive = calculateTotal(false);
+      let totalDiff = '0%', totalClass = 'neutral', totalArrow = '—';
+      if (currentBucket) {
+        const parts = currentBucket.split(':');
+        const pastBucket = `${String(parseInt(parts[0], 10) - 1).padStart(2, '0')}:${parts[1]}`;
+        const totalPast = calculateTotal(true, pastBucket);
+        const diff = totalLive.percentage - totalPast.percentage;
+        if (Math.abs(diff) > 0.5) {
+          totalClass = diff > 0 ? 'up' : 'down';
+          totalArrow = diff > 0 ? '▲' : '▼';
+          totalDiff = `${diff > 0 ? '+' : '-'}${Math.round(Math.abs(diff))}%`;
+        }
+      }
+      
+      document.getElementById('total-bar').style.width = `${Math.min(totalLive.percentage, 100)}%`;
+      document.getElementById('total-bar').style.backgroundColor = getColor(totalLive.percentage);
+      document.getElementById('total-trend').className = `trend-box ${totalClass}`;
+      document.getElementById('total-trend').innerHTML = `<span>${totalDiff}</span> <span style="font-size:0.7rem;">${totalArrow}</span>`;
+
+      let sorted = [...cachedDataRows];
+      if (currentSortMode === 'default') sorted.sort((a, b) => orderKeys.indexOf(a.key) - orderKeys.indexOf(b.key));
+      else sorted.sort((a, b) => currentSortMode === 'fullest' ? b.percentage - a.percentage : a.percentage - b.percentage);
+
+      let html = '';
+      sorted.forEach(row => {
+        const cap = capacityMap[row.key] || 100;
+        const label = areaLabelMap[row.key] || row.key;
+        let diffPct = '0%', trendClass = 'neutral', arrow = '—';
+
+        if (currentBucket && timeSeriesData.td[row.key]) {
+          const parts = currentBucket.split(':');
+          const pastBucket = `${String(parseInt(parts[0], 10) - 1).padStart(2, '0')}:${parts[1]}`;
+          const past = timeSeriesData.td[row.key].find(t => getTimeBucket(t.time) === pastBucket);
+          if (past) {
+            const diff = row.percentage - (parseFloat(past.capacity) * 100);
+            if (Math.abs(diff) > 0.5) {
+              trendClass = diff > 0 ? 'up' : 'down';
+              arrow = diff > 0 ? '▲' : '▼';
+              diffPct = `${diff > 0 ? '+' : '-'}${Math.round(Math.abs(diff))}%`;
+            }
+          }
+        }
+
+        html += `
+          <div class="card">
+            <div class="card-top">
+              <div class="card-title"><span>${label}</span></div>
+              <div class="card-controls">
+                <button class="action-btn" onclick="toggleChart('${row.key}')" title="Zeitverlauf anzeigen">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                </button>
+                <button class="action-btn" onclick="toggleInfo('${row.key}')" title="Informationen anzeigen">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                </button>
+              </div>
+            </div>
+            <div class="progress-container">
+              <div class="progress-track">
+                <div class="progress-bar" style="width:${Math.min(row.percentage, 100)}%; background-color:${getColor(row.percentage)};"></div>
+              </div>
+            </div>
+            <div class="card-meta">
+              <span>Kapazität: ${cap} Plätze</span>
+              <div class="trend-box ${trendClass}">
+                <span>${diffPct}</span> <span style="font-size:0.7rem;">${arrow}</span>
+              </div>
+            </div>
+            <div class="card-info-text" id="info-${row.key}">
+              ${areaDescriptionMap[row.key] || ''}
+            </div>
+            <div class="card-chart-container" id="chart-cont-${row.key}">
+              <div class="chart-layout-wrapper">
+                <canvas id="chart-${row.key}"></canvas>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+      grid.innerHTML = html;
+    }
+
+    function cycleSort() {
+      const btn = document.getElementById('sort-button');
+      if (currentSortMode === 'default') { currentSortMode = 'fullest'; btn.innerText = 'Sortierung: Vollste zuerst'; }
+      else if (currentSortMode === 'fullest') { currentSortMode = 'emptiest'; btn.innerText = 'Sortierung: Leerste zuerst'; }
+      else { currentSortMode = 'default'; btn.innerText = 'Sortierung: Standard'; }
+      renderDashboard();
+    }
+
     function buildAreaChart(key) {
-      const ctx = document.getElementById(`chart-${key}`).getContext('2d');
+      const canvas = document.getElementById(`chart-${key}`);
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
       const lwRaw = timeSeriesData.lw[key] || [];
       const tdRaw = timeSeriesData.td[key] || [];
-
-      const getTimeBucket = (timeStr) => {
-        if (!timeStr) return '';
-        const parts = timeStr.trim().split(':');
-        const hour = parts[0].padStart(2, '0');
-        const minutes = parseInt(parts[1] || '0', 10);
-        const bucketMinutes = minutes < 15 || minutes >= 45 ? '00' : '30';
-        
-        let normalizedHour = hour;
-        if (minutes >= 45) {
-          let nextHour = parseInt(hour, 10) + 1;
-          normalizedHour = String(nextHour).padStart(2, '0');
-        }
-        return `${normalizedHour}:${bucketMinutes}`;
-      };
-
       const currentLiveBucket = getTimeBucket(globalTimeString);
-      const hourLabels = lwRaw.map(d => getTimeBucket(d.time));
 
+      const labels = lwRaw.map(d => getTimeBucket(d.time));
+      
       let lastValidIndex = -1;
       const todayData = lwRaw.map((d, index) => {
-        const lwBucket = getTimeBucket(d.time);
-        const entry = tdRaw.find(t => getTimeBucket(t.time) === lwBucket);
-        
-        if (entry && lwBucket <= currentLiveBucket) {
+        const bucket = getTimeBucket(d.time);
+        const e = tdRaw.find(t => getTimeBucket(t.time) === bucket);
+        if (e && bucket <= currentLiveBucket) {
           lastValidIndex = index;
-          const val = parseFloat(entry.capacity);
-          return isNaN(val) ? null : val;
+          return parseFloat(e.capacity);
         }
         return null;
       });
+      const lastWeekData = lwRaw.map(d => parseFloat(d.capacity));
 
-      const lastWeekData = lwRaw.map(d => {
-        const val = parseFloat(d.capacity);
-        return isNaN(val) ? null : val;
-      });
-
-      let liveColor = '#1e3a3a'; 
-      if (lastValidIndex !== -1) {
-        const lastVal = todayData[lastValidIndex];
-        if (lastVal > 0.8) liveColor = '#ef4444';
-        else if (lastVal > 0.6) liveColor = '#f59e0b';
-        else if (lastVal > 0.4) liveColor = '#f9e216';
-        else liveColor = '#10b981';
+      // Dynamische Livepunkt-Farbe zurückholen
+      let livePointColor = '#0f172a';
+      if (lastValidIndex !== -1 && todayData[lastValidIndex] !== null) {
+        const lastVal = todayData[lastValidIndex] * 100;
+        livePointColor = getColor(lastVal);
       }
 
       const pointRadiusArray = new Array(todayData.length).fill(0);
-      const pointHoverRadiusArray = new Array(todayData.length).fill(0);
-      const pointBackgroundColorArray = new Array(todayData.length).fill('#1e3a3a');
-      const pointBorderColorArray = new Array(todayData.length).fill('#ffffff');
-      const pointBorderWidthArray = new Array(todayData.length).fill(0);
-
+      const pointBackgroundColorArray = new Array(todayData.length).fill('#0f172a');
       if (lastValidIndex !== -1) {
-        pointRadiusArray[lastValidIndex] = 5.5;
-        pointHoverRadiusArray[lastValidIndex] = 5.5;
-        pointBackgroundColorArray[lastValidIndex] = liveColor;
-        pointBorderColorArray[lastValidIndex] = '#ffffff';
-        pointBorderWidthArray[lastValidIndex] = 2;
+        pointRadiusArray[lastValidIndex] = 5;
+        pointBackgroundColorArray[lastValidIndex] = livePointColor;
       }
 
-      if (activeCharts[key]) {
-        activeCharts[key].destroy();
-      }
+      if (activeCharts[key]) activeCharts[key].destroy();
 
       activeCharts[key] = new Chart(ctx, {
         type: 'line',
         data: {
-          labels: hourLabels,
+          labels: labels,
           datasets: [
-            {
-              label: 'Heute',
-              data: todayData,
-              borderColor: '#1e3a3a',
-              backgroundColor: '#1e3a3a',
-              borderWidth: 2.5,
-              tension: 0.15,
+            { 
+              label: 'Heute', 
+              data: todayData, 
+              borderColor: '#0f172a', 
+              borderWidth: 2.5, 
+              tension: 0.15, 
               spanGaps: true,
               pointRadius: pointRadiusArray,
-              pointHoverRadius: pointHoverRadiusArray,
               pointBackgroundColor: pointBackgroundColorArray,
-              pointBorderColor: pointBorderColorArray,
-              pointBorderWidth: pointBorderWidthArray
+              pointBorderColor: '#ffffff',
+              pointBorderWidth: 1.5
             },
-            {
-              label: 'Letzte Woche',
-              data: lastWeekData,
-              borderColor: '#94a3b8',
-              borderWidth: 2,
-              borderDash: [5, 5],
-              pointRadius: 0,
-              pointHoverRadius: 0,
-              tension: 0.15,
-              fill: false
-            }
+            { label: 'Vorwoche', data: lastWeekData, borderColor: '#94a3b8', borderWidth: 1.5, borderDash: [4, 4], pointRadius: 0, tension: 0.15 }
           ]
         },
         options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          hover: { mode: null },
-          layout: { padding: { left: 10, right: 15 } },
-          plugins: {
-            legend: { display: true, position: 'top', labels: { boxWidth: 12, font: { size: 10 } } },
-            tooltip: { enabled: false }
-          },
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          layout: { padding: { left: 8, right: 8 } },
           scales: {
-            y: {
-              min: 0,
-              max: 1.027,
-              ticks: { display: false }, 
-              grid: { color: 'rgba(30, 41, 59, 0.04)' }
-            },
-            x: {
-              grid: { display: false },
-              ticks: { maxRotation: 0, minRotation: 0, font: { size: 10 }, autoSkip: true, maxTicksLimit: 12 }
-            }
+            y: { min: 0, max: 1.0, ticks: { display: false }, grid: { color: '#f1f5f9' } },
+            x: { grid: { display: false }, ticks: { font: { size: 9 }, autoSkip: true, maxTicksLimit: 6 } }
           }
         }
       });
     }
 
     async function initDashboard() {
-      const gridContainer = document.getElementById('live-dashboard');
-      const timeContainer = document.getElementById('update-time');
-      
       try {
-        const [lwData, tdData, liveResponse] = await Promise.all([
-          parseCSVFile('./temp/oc_values_lw.csv'),
-          parseCSVFile('./temp/oc_values_today.csv'),
-          fetch('./temp/oc_values.csv')
+        const [lw, td, liveRes] = await Promise.all([
+          parseCSVFile('./temp/oc_values_lw.csv'), parseCSVFile('./temp/oc_values_today.csv'), fetch('./temp/oc_values.csv')
         ]);
-
-        timeSeriesData.lw = lwData;
-        timeSeriesData.td = tdData;
-
-        if (!liveResponse.ok) throw new Error('Live-Daten konnten nicht geladen werden.');
+        timeSeriesData.lw = lw; timeSeriesData.td = td;
+        if (!liveRes.ok) throw new Error();
         
-        const text = await liveResponse.text();
-        const lines = text.trim().split('\n');
+        const lines = (await liveRes.text()).split('\n');
+        cachedDataRows = [];
+        let ts = '';
         
-        let fileTimestamp = '';
-        const dataRows = [];
+        lines.forEach(line => {
+          if (!line.trim()) return;
+          const parts = line.split(line.includes(';') ? ';' : ',');
+          if (parts.length < 2) return;
+          const k = parts[0].trim();
+          const v = parts[1].trim();
 
-        for (let i = 0; i < lines.length; i++) {
-          const line = lines[i].trim();
-          if (!line) continue;
-
-          const delimiter = line.includes(';') ? ';' : ',';
-          const parts = line.split(delimiter);
-          if (parts.length < 2) continue;
-
-          const key = parts[0].trim();
-          const valueStr = parts[1].trim();
-
-          if (key.toLowerCase().startsWith('timestamp') || key.toLowerCase().startsWith('zeit')) {
-            fileTimestamp = 'Stand: ' + valueStr;
-            const match = valueStr.match(/(\d{2}:\d{2})/);
-            if (match) globalTimeString = match[1];
-            continue;
+          if (k.toLowerCase().startsWith('timestamp') || k.toLowerCase().startsWith('zeit')) {
+            ts = 'Stand: ' + v;
+            const m = v.match(/(\d{2}:\d{2})/);
+            if (m) globalTimeString = m[1];
+          } else {
+            const pct = parseFloat(v);
+            if (!isNaN(pct)) cachedDataRows.push({ key: k, percentage: pct });
           }
+        });
 
-          const percentage = parseFloat(valueStr);
-          if (isNaN(percentage)) continue; 
-
-          dataRows.push({ key, percentage });
-        }
-
-        const orderKeys = Object.keys(capacityMap);
-        dataRows.sort((a, b) => orderKeys.indexOf(a.key) - orderKeys.indexOf(b.key));
-
-        let gridHtml = '';
-
-        for (const row of dataRows) {
-          const totalSeats = capacityMap[row.key] || 100;
-          const displayLabel = areaLabelMap[row.key] || row.key;
-          const displayseats = seatroomMap[row.key] || row.key;
-          const description = areaDescriptionMap[row.key] || '';
-
-          let barColor = 'var(--green)';
-          if (row.percentage > 80) barColor = 'var(--red)';
-          else if (row.percentage > 60) barColor = 'var(--orange)';
-          else if (row.percentage > 40) barColor = 'var(--yellow)';
-
-          gridHtml += `
-            <div class="status-card">
-              <div class="card-controls">
-                <button class="action-btn" onclick="toggleChart('${row.key}')" title="Zeitverlauf anzeigen" aria-label="Zeitverlauf anzeigen">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="18" y1="20" x2="18" y2="10"></line>
-                    <line x1="12" y1="20" x2="12" y2="4"></line>
-                    <line x1="6" y1="20" x2="6" y2="14"></line>
-                  </svg>
-                </button>
-                <button class="action-btn" onclick="toggleInfo('${row.key}')" title="${description}" aria-label="Information anzeigen">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <line x1="12" y1="16" x2="12" y2="12"></line>
-                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
-                  </svg>
-                </button>
-              </div>
-              
-              <div class="card-header">
-                <span class="card-label">${displayLabel}</span>
-              </div>
-              
-              <div class="progress-wrapper">
-                <div class="progress-track">
-                  <div class="progress-bar" style="width: ${Math.min(row.percentage, 100)}%; background-color: ${barColor};"></div>
-                </div>
-              </div>
-
-              <div class="card-info-text" id="info-${row.key}">
-                ${description}
-              </div>
-
-              <div class="card-chart-container" id="chart-cont-${row.key}">
-                <div class="chart-layout-wrapper">
-                  <canvas id="chart-${row.key}"></canvas>
-                </div>
-              </div>
-                
-              <span class="card-meta">Gesamt: ${totalSeats} ${displayseats}</span>
-            </div>
-          `;
-        }
-
-        gridContainer.innerHTML = gridHtml;
-        timeContainer.innerText = fileTimestamp || 'Stand: Unbekannt';
-
-      } catch (err) {
-        console.error(err);
-        gridContainer.innerHTML = `<p style="color: var(--red);">Fehler beim Laden der aktuellen Belegungswerte.</p>`;
-        timeContainer.innerText = 'Fehler';
+        document.getElementById('update-time').innerText = ts || 'Stand: Unbekannt';
+        renderDashboard();
+      } catch (e) {
+        document.getElementById('live-dashboard').innerHTML = '<p style="color:var(--red); padding:12px;">Fehler beim Laden der Daten.</p>';
       }
     }
 
     document.addEventListener('DOMContentLoaded', initDashboard);
-    
-  (function () {
-  const colors = ['#10b981', '#f9e216', '#f59e0b', '#ef4444', '#59c7eb', '#1e3a3a'];
-  let clicks = 0;
-  let firstClick = 0;
-
-  function rainC() {
-    const canvas = document.createElement('canvas');
-    canvas.style.cssText =
-      'position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:9999;';
-    document.body.appendChild(canvas);
-    const ctx = canvas.getContext('2d');
-
-    function resize() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-    resize();
-    window.addEventListener('resize', resize);
-
-    const N = 160;
-    const pieces = Array.from({ length: N }, () => ({
-      x: Math.random() * canvas.width,
-      y: Math.random() * -canvas.height,
-      w: 6 + Math.random() * 6,
-      h: 8 + Math.random() * 8,
-      color: colors[(Math.random() * colors.length) | 0],
-      vy: 2 + Math.random() * 3,
-      vx: -1.5 + Math.random() * 3,
-      rot: Math.random() * Math.PI,
-      vr: -0.15 + Math.random() * 0.3
-    }));
-
-    const start = performance.now();
-    const DURATION = 7000; // ms
-
-    function frame(now) {
-      const elapsed = now - start;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      for (const p of pieces) {
-        p.x += p.vx;
-        p.y += p.vy;
-        p.rot += p.vr;
-
-        ctx.save();
-        ctx.translate(p.x, p.y);
-        ctx.rotate(p.rot);
-        ctx.globalAlpha = elapsed > DURATION - 800
-          ? Math.max(0, (DURATION - elapsed) / 800)
-          : 1;
-        ctx.fillStyle = p.color;
-        ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
-        ctx.restore();
-      }
-
-      if (elapsed < DURATION) {
-        requestAnimationFrame(frame);
-      } else {
-        window.removeEventListener('resize', resize);
-        canvas.remove();
-      }
-    }
-    requestAnimationFrame(frame);
-  }
-
-  const pill = document.getElementById('pill-green');
-  if (pill) {
-    pill.style.cursor = 'pointer';
-    pill.addEventListener('click', () => {
-      const now = Date.now();
-      
-      if (now - firstClick > 900) {
-        clicks = 0;
-        firstClick = now;
-      }
-      clicks++;
-      if (clicks >= 4) {
-        clicks = 0;
-        rainC();
-      }
-    });
-  }
-})();
   </script>
 </body>
 </html>
