@@ -358,16 +358,16 @@
       <div id="update-time" class="timestamp">Aktualisiere...</div>
       
       <div class="legend">
-        <div class="legend-item"><span class="dot" style="background: var(--green)"></span> Gering</div>
-        <div class="legend-item"><span class="dot" style="background: var(--yellow)"></span> Moderat</div>
-        <div class="legend-item"><span class="dot" style="background: var(--orange)"></span> Stark</div>
-        <div class="legend-item"><span class="dot" style="background: var(--red)"></span> Sehr stark</div>
+        <div class="legend-item" id="pill-green"><span class="dot" style="background: var(--green)"></span> gering</div>
+        <div class="legend-item"><span class="dot" style="background: var(--yellow)"></span> moderat</div>
+        <div class="legend-item"><span class="dot" style="background: var(--orange)"></span> stark</div>
+        <div class="legend-item"><span class="dot" style="background: var(--red)"></span> sehr stark</div>
         <button class="methodik-btn" style="padding: 4px 10px; font-size: 0.75rem;" onclick="toggleMethodik()">Methodik</button>
       </div>
     </footer>
 
     <div id="methodik-info">
-      Die Auslastungsdaten werden halbstündlich aktualisiert. Die berechneten Werte indizieren die Platzbelegung der einzelnen Bereiche im Ampelsystem. Die nur von der Bibliothek zugänglichen Seminarräume J213, BS217 und BG335 sind in der Berechnung exkludiert.
+      Die Seite zeigt eine geschätzte Auslastung der verschiedenen Bibliotheksbereiche an. Dazu wird halbstündlich die Anzahl der eingeloggten Endgeräte in den WLAN-Routern der einzelnen Bereiche erfasst. Daraus lässt sich die relative Auslastung abschätzen, die in einem Ampelsystem dargestellt wird. Der Chart zu jedem Bereich zeigt die heutige Entwicklung der Auslastung im Vergleich zum selben Wochentag der Vorwoche. Die nur über die Bibliothek zugänglichen Seminarräume J213, BS217 und BG335 sowie die Computerpools sind von der Berechnung ausgenommen.
     </div>
 
   </div>
@@ -717,6 +717,91 @@
     }
 
     document.addEventListener('DOMContentLoaded', initDashboard);
+    
+  (function () {
+  const colors = ['#10b981', '#f9e216', '#f59e0b', '#ef4444', '#59c7eb', '#1e3a3a'];
+  let clicks = 0;
+  let firstClick = 0;
+
+  function rainC() {
+    const canvas = document.createElement('canvas');
+    canvas.style.cssText =
+      'position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:9999;';
+    document.body.appendChild(canvas);
+    const ctx = canvas.getContext('2d');
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    const N = 160;
+    const pieces = Array.from({ length: N }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * -canvas.height,
+      w: 6 + Math.random() * 6,
+      h: 8 + Math.random() * 8,
+      color: colors[(Math.random() * colors.length) | 0],
+      vy: 2 + Math.random() * 3,
+      vx: -1.5 + Math.random() * 3,
+      rot: Math.random() * Math.PI,
+      vr: -0.15 + Math.random() * 0.3
+    }));
+
+    const start = performance.now();
+    const DURATION = 7000; // ms
+
+    function frame(now) {
+      const elapsed = now - start;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      for (const p of pieces) {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.rot += p.vr;
+
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot);
+        
+        ctx.globalAlpha = elapsed > DURATION - 800
+          ? Math.max(0, (DURATION - elapsed) / 800)
+          : 1;
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+        ctx.restore();
+      }
+
+      if (elapsed < DURATION) {
+        requestAnimationFrame(frame);
+      } else {
+        window.removeEventListener('resize', resize);
+        canvas.remove();
+      }
+    }
+    requestAnimationFrame(frame);
+  }
+
+  const pill = document.getElementById('pill-green');
+  if (pill) {
+    
+    pill.addEventListener('click', () => {
+      const now = Date.now();
+      
+      if (now - firstClick > 900) {
+        clicks = 0;
+        firstClick = now;
+      }
+      clicks++;
+      if (clicks >= 5) {
+        clicks = 0;
+        rainC();
+      }
+    });
+  }
+})();
   </script>
 </body>
 </html>
