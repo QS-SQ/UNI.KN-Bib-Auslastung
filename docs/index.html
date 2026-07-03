@@ -867,7 +867,7 @@
     }));
 
     const start = performance.now();
-    const DURATION = 4000; // ms
+    const DURATION = 7000; // ms
 
     function frame(now) {
       const elapsed = now - start;
@@ -881,7 +881,6 @@
         ctx.save();
         ctx.translate(p.x, p.y);
         ctx.rotate(p.rot);
-        // fade-out in den letzten 800ms
         ctx.globalAlpha = elapsed > DURATION - 800
           ? Math.max(0, (DURATION - elapsed) / 800)
           : 1;
@@ -906,12 +905,12 @@
     pill.addEventListener('click', () => {
       const now = Date.now();
       
-      if (now - firstClick > 600) {
+      if (now - firstClick > 900) {
         clicks = 0;
         firstClick = now;
       }
       clicks++;
-      if (clicks >= 5) {
+      if (clicks >= 4) {
         clicks = 0;
         rainC();
       }
