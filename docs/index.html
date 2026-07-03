@@ -431,6 +431,10 @@
       if (event) {
         event.stopPropagation();
       }
+
+      // Karte aufklappen, falls noch geschlossen
+  const cardEl = document.getElementById(`card-${key}`);
+  if (cardEl) cardEl.classList.add('expanded');
       
       const infoView = document.getElementById(`info-${key}`);
       const chartView = document.getElementById(`chart-cont-${key}`);
