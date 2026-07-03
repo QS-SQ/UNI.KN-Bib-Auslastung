@@ -173,7 +173,7 @@
 
     /* Icon-Tabs oben rechts platziert */
     .card-tabs {
-      display: none;
+      display: flex;
       gap: 4px;
       background: #f1f5f9;
       padding: 3px;
@@ -349,10 +349,7 @@
       <p style="color: var(--muted); padding: 12px;">Lade Daten...</p>
     </main>
 
-    <div style="font-size: 0.85rem; color: var(--muted); background: #f1f5f9; padding: 12px 16px; border-radius: var(--radius-md); border-left: 4px solid #00a9e0; margin-top: 8px;">
-      In der <strong>N-Bibliothek</strong> gibt es weitere 100 Arbeitsplätze. <br>
-      Öffnungszeiten N: Mo.–Fr. 8:00–17:30 Uhr (Aug./Sept. bis 16:30 Uhr).
-    </div>
+    
 
     <footer class="footer-panel">
       <div id="update-time" class="timestamp">Aktualisiere...</div>
@@ -370,11 +367,16 @@
       Die Seite zeigt eine geschätzte Auslastung der verschiedenen Bibliotheksbereiche an. Dazu wird halbstündlich die Anzahl der eingeloggten Endgeräte in den WLAN-Routern der einzelnen Bereiche erfasst. Daraus lässt sich die relative Auslastung abschätzen, die in einem Ampelsystem dargestellt wird. Der Chart zu jedem Bereich zeigt die heutige Entwicklung der Auslastung im Vergleich zum selben Wochentag der Vorwoche. Die nur über die Bibliothek zugänglichen Seminarräume J213, BS217 und BG335 sowie die Computerpools sind von der Berechnung ausgenommen.
     </div>
 
+    <div style="font-size: 0.85rem; color: var(--muted); background: #f1f5f9; padding: 12px 16px; border-radius: var(--radius-md); border-left: 4px solid #00a9e0; margin-top: 8px;">
+      In der <strong>N-Bibliothek</strong> gibt es weitere 100 Arbeitsplätze. <br>
+      Öffnungszeiten N: Mo.–Fr. 8:00–17:30 Uhr (Aug./Sept. bis 16:30 Uhr).
+    </div>
+
   </div>
 
   <script>
     const capacityMap = { 'BSGA': 165, 'JEAP': 140, 'JGAR': 180, 'BSEA': 90, 'BSBG': 25, 'BSLS': 59, 'BG23': 85, 'BG56': 65, 'INFO': 160 };
-    const orderKeys = ['INFO', 'BG23', 'BG56', 'BSLS', 'BSBG', 'BSEA', 'BSGA', 'JGAR', 'JEAP'];
+    const orderKeys = ['BSGA','BG23', 'BG56', 'BSEA',  'BSBG','BSLS', 'JEAP', 'JGAR', 'INFO'];
     const areaLabelMap = { 'INFO': 'Info-Zentrum', 'BG23': 'Ebenen BG2/BG3', 'BG56': 'Ebenen BG5/BG6', 'BSLS': 'Lesesaal (BS6-BG6)', 'BSBG': 'Übergang BS5-BG5', 'BSEA': 'Übergang BS2/3-BG2/3', 'BSGA': 'Buchbereich BS', 'JGAR': 'Arbeitsräume J', 'JEAP': 'Einzelarbeitsplätze J' };
     const areaDescriptionMap = { 'INFO': '160 Arbeitsplätze im Infozentrum, Bibcafe und allen anderen Bereiche auf BA.', 'BG23': '145 Arbeitsplätze auf den Ebenen BG2/BG3 und BH2/BH3.', 'BG56': '65 Einzelarbeitsplätze auf Ebene BG5 und Ebene BG6.', 'BSLS': '59 Arbeitsplätze im Lesesaal im Übergang von BS6 nach BG6.', 'BSBG': '5 Gruppenarbeitsräume im Übergang von BS5 nach BG5.', 'BSEA': '90 Arbeitsplätze in den Fluren von BS2/BS3 nach BG2/BG3 sowie an den großen Tischen auf BS3 Richtung Übergang BG3.', 'BSGA': '165 Arbeitsplätze auf den Ebenen BS2 bis BS6 (exkl. Sonderräume).', 'JGAR': '54 Arbeitsräume in J2-J6.', 'JEAP': '140 Einzelarbeitsplätze in J2-J6.' };
 
