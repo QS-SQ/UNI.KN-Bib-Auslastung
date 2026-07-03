@@ -12,7 +12,7 @@ on:
   #push:
   #  branches:
   #    - main
-  workflow_dispatch: 
+  #workflow_dispatch: 
 
 permissions:
   contents: read
@@ -62,7 +62,6 @@ jobs:
           ls -lah docs/temp
           wc -l docs/temp/*.csv
           head -5 docs/temp/*.csv
-          tail -5 docs/temp/*.csv
           
       - name: Setup Pages
         uses: actions/configure-pages@v5
