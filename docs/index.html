@@ -42,7 +42,6 @@
       gap: 24px;
     }
 
-    /* Grid-Layout: Perfekte Links-Rechts-Balance */
     .header-panel {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -55,7 +54,6 @@
       align-items: start;
     }
 
-    /* Linker Bereich: KIM, Überschrift und die Gesamtauslastung darunter */
     .header-left-content {
       display: flex;
       flex-direction: column;
@@ -95,7 +93,7 @@
       border-radius: var(--radius-md);
       padding: 16px;
       width: 100%;
-      max-width: 340px; /* Begrenzt die Breite links für eine bessere Optik */
+      max-width: 340px;
     }
 
     .global-info {
@@ -107,12 +105,11 @@
       margin-bottom: 8px;
     }
 
-    /* Rechter Bereich: Logo oben auf Höhe des Textes, Sortierung darunter */
     .header-right-content {
       display: flex;
       flex-direction: column;
       align-items: flex-end;
-      gap: 20px;
+      gap: 65px;
     }
 
     .panel-logo {
@@ -133,7 +130,7 @@
       color: var(--text);
       padding: 8px 14px;
       border-radius: var(--radius-md);
-      font-size: 0.85rem;
+      font-size: 0.75rem;
       font-weight: 600;
       cursor: pointer;
       display: inline-flex;
@@ -147,7 +144,6 @@
       border-color: var(--muted);
     }
 
-    /* Dashboard & Cards */
     .dashboard-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
@@ -537,7 +533,7 @@
       
       const totalLive = calculateTotal(false);
 
-      let totalArrowStyle = `color: #94a3b8; font-size: 1.2rem;`;
+      let totalArrowStyle = `color: #94a3b8; font-size: 1.1rem;`;
 
       if (currentBucket) {
         const parts = currentBucket.split(':');
@@ -545,11 +541,11 @@
         const totalPast = calculateTotal(true, pastBucket);
         const diff = totalLive.percentage - totalPast.percentage;
 
-        if (diff > 5) totalArrowStyle = `transform: rotate(-90deg); color: var(--red); font-size: 1.2rem;`;
-        else if (diff > 1) totalArrowStyle = `transform: rotate(-35deg); color: var(--red); font-size: 1.2rem;`;
-        else if (diff < -5) totalArrowStyle = `transform: rotate(90deg); color: var(--green); font-size: 1.2rem;`;
-        else if (diff < -1) totalArrowStyle = `transform: rotate(35deg); color: var(--green); font-size: 1.2rem;`;
-        else totalArrowStyle = `transform: rotate(0deg); color: #94a3b8; font-size: 1.2rem;`;
+        if (diff > 5) totalArrowStyle = `transform: rotate(-90deg); color: var(--red); font-size: 1.1rem;`;
+        else if (diff > 1) totalArrowStyle = `transform: rotate(-35deg); color: var(--red); font-size: 1.1rem;`;
+        else if (diff < -5) totalArrowStyle = `transform: rotate(90deg); color: var(--green); font-size: 1.1rem;`;
+        else if (diff < -1) totalArrowStyle = `transform: rotate(35deg); color: var(--green); font-size: 1.1rem;`;
+        else totalArrowStyle = `transform: rotate(0deg); color: #94a3b8; font-size: 1.1rem;`;
       }
 
       document.getElementById('total-bar').style.width = `${Math.min(totalLive.percentage, 100)}%`;
