@@ -51,7 +51,7 @@
       display: grid;
       grid-template-columns: 1fr auto;
       gap: 32px;
-      align-items: start;
+      align-items: stretch;
     }
 
     .header-left-content {
@@ -59,6 +59,7 @@
       flex-direction: column;
       align-items: flex-start;
       gap: 16px;
+      width: 100%;
     }
 
     .title-wrapper {
@@ -93,7 +94,6 @@
       border-radius: var(--radius-md);
       padding: 16px;
       width: 100%;
-      max-width: 340px;
     }
 
     .global-info {
@@ -109,7 +109,8 @@
       display: flex;
       flex-direction: column;
       align-items: flex-end;
-      gap: 65px;
+      justify-content: space-between;
+      gap: 24px;
     }
 
     .panel-logo {
@@ -120,7 +121,9 @@
 
     .controls-row {
       display: flex;
-      justify-content: flex-end;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
       width: 100%;
     }
 
@@ -142,6 +145,17 @@
     .sort-btn:hover, .methodik-btn:hover {
       background: #f8fafc;
       border-color: var(--muted);
+    }
+
+    .header-timestamp {
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-weight: 500;
+      padding-right: 4px;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 6px; 
     }
 
     .dashboard-grid {
@@ -300,13 +314,18 @@
       border-top: 1px solid var(--border);
     }
 
-    .timestamp {
-      font-size: 0.85rem;
-      color: var(--muted);
-      font-weight: 500;
+    .n-bib-info-box {
+      font-size: 0.8rem; 
+      color: var(--muted); 
+      background: #f1f5f9; 
+      padding: 10px 14px; 
+      border-radius: var(--radius-md); 
+      border-left: 4px solid #00a9e0; 
+      line-height: 1.4;
+      max-width: 500px;
     }
 
-    .legend { display: flex; gap: 16px; flex-wrap: wrap; }
+    .legend { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
     .legend-item {
       display: flex;
       align-items: center;
@@ -316,6 +335,14 @@
       font-weight: 500;
     }
     .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+    .status-dot {
+      width: 4px;
+      height: 4px;
+      background-color: var(--green);
+      border-radius: 50%;
+      display: inline-block;
+    }
 
     #methodik-info {
       background: var(--surface);
@@ -330,8 +357,8 @@
 
     @media (max-width: 768px) {
       .header-panel { grid-template-columns: 1fr; gap: 24px; }
-      .global-status { max-width: 100%; }
-      .header-right-content { align-items: flex-start; }
+      .header-right-content { align-items: flex-start; gap: 16px; justify-content: flex-start; }
+      .controls-row { align-items: flex-start; }
     }
   </style>
 </head>
@@ -362,6 +389,7 @@
         
         <div class="controls-row">
           <button id="sort-button" class="sort-btn" onclick="cycleSort()">Sortierung: Standard</button>
+          <div id="update-time" class="header-timestamp">Aktualisiere...</div>
         </div>
       </div>
     </header>
@@ -371,7 +399,10 @@
     </main>
 
     <footer class="footer-panel">
-      <div id="update-time" class="timestamp">Aktualisiere...</div>
+      <div class="n-bib-info-box">
+        In der <strong>N-Bibliothek</strong> gibt es weitere 100 Arbeitsplätze.<br>
+        Öffnungszeiten N: Mo.–Fr. 8:00–17:30 Uhr (Aug./Sept. bis 16:30 Uhr).
+      </div>
       
       <div class="legend">
         <div class="legend-item" id="pill-green"><span class="dot" style="background: var(--green)"></span> gering</div>
@@ -392,18 +423,13 @@
       Die nur über die Bibliothek zugänglichen Seminarräume J213, BS217 und BG335 sowie die Computerpools sind von der Berechnung ausgenommen.
     </div>
 
-    <div style="font-size: 0.85rem; color: var(--muted); background: #f1f5f9; padding: 12px 16px; border-radius: var(--radius-md); border-left: 4px solid #00a9e0; margin-top: 8px;">
-      In der <strong>N-Bibliothek</strong> gibt es weitere 100 Arbeitsplätze. <br>
-      Öffnungszeiten N: Mo.–Fr. 8:00–17:30 Uhr (Aug./Sept. bis 16:30 Uhr).
-    </div>
-
   </div>
 
   <script>
     const capacityMap = { 'BSGA': 165, 'JEAP': 140, 'JGAR': 180, 'BSEA': 90, 'BSBG': 25, 'BSLS': 59, 'BG23': 85, 'BG56': 65, 'INFO': 160 };
     const orderKeys = ['BSGA','BG23', 'BG56', 'BSEA',  'BSBG','BSLS', 'JEAP', 'JGAR', 'INFO'];
     const areaLabelMap = { 'INFO': 'Info-Zentrum', 'BG23': 'Ebenen BG2/BG3', 'BG56': 'Ebenen BG5/BG6', 'BSLS': 'Lesesaal (BS6-BG6)', 'BSBG': 'Übergang BS5-BG5', 'BSEA': 'Übergang BS2/3-BG2/3', 'BSGA': 'Buchbereich BS', 'JGAR': 'Arbeitsräume J', 'JEAP': 'Einzelarbeitsplätze J' };
-    const areaDescriptionMap = { 'INFO': '160 Arbeitsplätze im Infozentrum, Bibcafe und allen anderen Bereiche auf BA.', 'BG23': '145 Arbeitsplätze auf den Ebenen BG2/BG3 und BH2/BH3.', 'BG56': '65 Einzelarbeitsplätze auf Ebene BG5 und Ebene BG6.', 'BSLS': '59 Arbeitsplätze im Lesesaal im Übergang von BS6 nach BG6.', 'BSBG': '5 Gruppenarbeitsräume im Übergang von BS5 nach BG5.', 'BSEA': '90 Arbeitsplätze in den Fluren von BS2/BS3 nach BG2/BG3 sowie an den großen Tischen auf BS3 Richtung Übergang BG3.', 'BSGA': '165 Arbeitsplätze auf den Ebenen BS2 bis BS6 (exkl. Sonderräume).', 'JGAR': '54 Arbeitsräume in J2-J6.', 'JEAP': '140 Einzelarbeitsplätze in J2-J6.' };
+    const areaDescriptionMap = { 'INFO': '160 Arbeitsplätze im Infozentrum, Bibcafe und allen anderen Bereiche auf BA.', 'BG23': '145 Arbeitsplätze auf den Ebenen BG2/BG3 und BH2/BH3 (exkl. BG335).', 'BG56': '65 Einzelarbeitsplätze auf Ebene BG5 und Ebene BG6.', 'BSLS': '59 Arbeitsplätze im Lesesaal im Übergang von BS6 nach BG6.', 'BSBG': '5 Gruppenarbeitsräume im Übergang von BS5 nach BG5.', 'BSEA': '90 Arbeitsplätze in den Fluren von BS2/BS3 nach BG2/BG3 sowie an den großen Tischen auf BS3 in Richtung Übergang BG3.', 'BSGA': '165 Arbeitsplätze auf den Ebenen BS2 bis BS6 (exkl. BS217).', 'JGAR': '54 Arbeitsräume in J2-J6.', 'JEAP': '140 Einzelarbeitsplätze in J2-J6 (exkl. J213).' };
 
     let currentSortMode = 'default';
     let timeSeriesData = { lw: {}, td: {} };
@@ -433,6 +459,14 @@
       }
     };
     Chart.register(leftColorBarPlugin);
+
+    function getFormattedShortDate() {
+      const today = new Date();
+      const day = String(today.getDate()).padStart(2, '0');
+      const month = String(today.getMonth() + 1).padStart(2, '0');
+      const year = String(today.getFullYear()).slice(-2);
+      return `${day}.${month}.${year}`;
+    }
 
     function toggleMethodik() {
       const el = document.getElementById('methodik-info');
@@ -541,9 +575,9 @@
         const totalPast = calculateTotal(true, pastBucket);
         const diff = totalLive.percentage - totalPast.percentage;
 
-        if (diff > 5) totalArrowStyle = `transform: rotate(-90deg); color: var(--red); font-size: 1.1rem;`;
+        if (diff > 5) totalArrowStyle = `transform: rotate(-65deg); color: var(--red); font-size: 1.1rem;`;
         else if (diff > 1) totalArrowStyle = `transform: rotate(-35deg); color: var(--red); font-size: 1.1rem;`;
-        else if (diff < -5) totalArrowStyle = `transform: rotate(90deg); color: var(--green); font-size: 1.1rem;`;
+        else if (diff < -5) totalArrowStyle = `transform: rotate(65deg); color: var(--green); font-size: 1.1rem;`;
         else if (diff < -1) totalArrowStyle = `transform: rotate(35deg); color: var(--green); font-size: 1.1rem;`;
         else totalArrowStyle = `transform: rotate(0deg); color: #94a3b8; font-size: 1.1rem;`;
       }
@@ -565,7 +599,7 @@
         const label = areaLabelMap[row.key] || row.key;
         
         let arrowIcon = '➔'; 
-        let arrowColor = '#64748b';
+        let arrowStyle = `color: #94a3b8; font-size: 1.1rem;`;
 
         if (currentBucket && timeSeriesData.td[row.key]) {
           const parts = currentBucket.split(':');
@@ -574,33 +608,12 @@
           if (past) {
             const diff = row.percentage - (parseFloat(past.capacity) * 100);
             
-            if (diff > 5) {
-              arrowIcon = '➔';
-              arrowColor = 'var(--red)';
-            } else if (diff > 1) {
-              arrowIcon = '➔';
-              arrowColor = 'var(--red)';
-            } else if (diff < -5) {
-              arrowIcon = '➔';
-              arrowColor = 'var(--green)';
-            } else if (diff < -1) {
-              arrowIcon = '➔';
-              arrowColor = 'var(--green)';
-            } else {
-              arrowIcon = '➔';
-              arrowColor = '#64748b';
-            }
-
             if (diff > 5) arrowStyle = `transform: rotate(-65deg); color: var(--red); font-size: 1.1rem;`;
             else if (diff > 1) arrowStyle = `transform: rotate(-30deg); color: var(--red); font-size: 1.1rem;`;
             else if (diff < -5) arrowStyle = `transform: rotate(65deg); color: var(--green); font-size: 1.1rem;`;
             else if (diff < -1) arrowStyle = `transform: rotate(30deg); color: var(--green); font-size: 1.1rem;`;
             else arrowStyle = `transform: rotate(0deg); color: #94a3b8; font-size: 1.1rem;`;
-          } else {
-            arrowStyle = `color: #94a3b8; font-size: 1.1rem;`;
           }
-        } else {
-          arrowStyle = `color: #94a3b8; font-size: 1.1rem;`;
         }
 
         const cardId = `card-${row.key}`;
@@ -759,16 +772,19 @@
           const v = parts[1].trim();
 
           if (k.toLowerCase().startsWith('timestamp') || k.toLowerCase().startsWith('zeit')) {
-            ts = 'Stand: ' + v;
-            const m = v.match(/(\d{2}:\d{2})/);
-            if (m) globalTimeString = m[1];
+            const timeMatch = v.match(/(\d{2}:\d{2})/);
+            const timeOnly = timeMatch ? timeMatch[1] : v;
+            
+            ts = `Stand: ${getFormattedShortDate()} - ${timeOnly} Uhr`;
+            if (timeMatch) globalTimeString = timeMatch[1];
           } else {
             const pct = parseFloat(v);
             if (!isNaN(pct)) cachedDataRows.push({ key: k, percentage: pct });
           }
         });
 
-        document.getElementById('update-time').innerText = ts || 'Stand: Unbekannt';
+
+        document.getElementById('update-time').innerHTML = `<span class="status-dot"></span> ` + (ts || `Stand: ${getFormattedShortDate()}`);
         renderDashboard();
       } catch (e) {
         document.getElementById('live-dashboard').innerHTML = '<p style="color:var(--red); padding:12px;">Fehler beim Laden der Daten.</p>';
