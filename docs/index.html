@@ -42,6 +42,7 @@
       gap: 24px;
     }
 
+    /* Grid-Layout: Perfekte Links-Rechts-Balance */
     .header-panel {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -50,8 +51,21 @@
       box-shadow: var(--shadow);
       display: grid;
       grid-template-columns: 1fr auto;
-      gap: 24px;
-      align-items: center;
+      gap: 32px;
+      align-items: start;
+    }
+
+    /* Linker Bereich: KIM, Überschrift und die Gesamtauslastung darunter */
+    .header-left-content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .title-wrapper {
+      display: flex;
+      flex-direction: column;
     }
 
     .eyebrow {
@@ -63,11 +77,11 @@
       margin-bottom: 4px;
     }
 
-    .title-wrapper h1 {
+    .header-left-content h1 {
       font-size: 1.5rem;
       font-weight: 700;
       letter-spacing: -0.02em;
-      margin-bottom: 16px;
+      margin: 0;
     }
 
     .title-underline {
@@ -80,7 +94,8 @@
       background: #f1f5f9;
       border-radius: var(--radius-md);
       padding: 16px;
-      min-width: 280px;
+      width: 100%;
+      max-width: 340px; /* Begrenzt die Breite links für eine bessere Optik */
     }
 
     .global-info {
@@ -92,20 +107,24 @@
       margin-bottom: 8px;
     }
 
-    .header-right-meta {
+    /* Rechter Bereich: Logo oben auf Höhe des Textes, Sortierung darunter */
+    .header-right-content {
       display: flex;
       flex-direction: column;
       align-items: flex-end;
-      gap: 12px;
+      gap: 20px;
     }
 
-    .panel-logo { height: 48px; width: auto; }
+    .panel-logo {
+      height: 52px; 
+      width: auto;
+      object-fit: contain;
+    }
 
     .controls-row {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 4px;
+      justify-content: flex-end;
+      width: 100%;
     }
 
     .sort-btn, .methodik-btn {
@@ -128,6 +147,7 @@
       border-color: var(--muted);
     }
 
+    /* Dashboard & Cards */
     .dashboard-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
@@ -171,9 +191,8 @@
       padding-bottom: 2px;
     }
 
-    /* Icon-Tabs oben rechts platziert */
     .card-tabs {
-      display: flex;
+      display: none;
       gap: 4px;
       background: #f1f5f9;
       padding: 3px;
@@ -183,6 +202,10 @@
 
     .card.expanded .card-tabs {
       display: flex;
+    }
+
+    .card.expanded .card-top > div[style*="transition"] {
+      display: none !important;
     }
 
     .tab-btn {
@@ -310,10 +333,9 @@
     }
 
     @media (max-width: 768px) {
-      .header-panel { grid-template-columns: 1fr; }
-      .header-right-meta { align-items: flex-start; }
-      .global-status { min-width: 100%; }
-      .footer-panel { flex-direction: column; align-items: flex-start; }
+      .header-panel { grid-template-columns: 1fr; gap: 24px; }
+      .global-status { max-width: 100%; }
+      .header-right-content { align-items: flex-start; }
     }
   </style>
 </head>
@@ -322,9 +344,11 @@
   <div class="container">
     
     <header class="header-panel">
-      <div class="title-wrapper">
-        <p class="eyebrow">Kommunikations-, Informations-, Medienzentrum (KIM)</p>
-        <h1><span class="title-underline">Aktuelle Auslastung der Bibliothek</span></h1>
+      <div class="header-left-content">
+        <div class="title-wrapper">
+          <p class="eyebrow">Kommunikations-, Informations-, Medienzentrum (KIM)</p>
+          <h1><span class="title-underline">Aktuelle Auslastung der Bibliothek</span></h1>
+        </div>
         
         <div class="global-status">
           <div class="global-info">
@@ -337,8 +361,9 @@
         </div>
       </div>
 
-      <div class="header-right-meta">
+      <div class="header-right-content">
         <img src="logoUniKN.svg" alt="Logo" class="panel-logo">
+        
         <div class="controls-row">
           <button id="sort-button" class="sort-btn" onclick="cycleSort()">Sortierung: Standard</button>
         </div>
@@ -348,8 +373,6 @@
     <main id="live-dashboard" class="dashboard-grid">
       <p style="color: var(--muted); padding: 12px;">Lade Daten...</p>
     </main>
-
-    
 
     <footer class="footer-panel">
       <div id="update-time" class="timestamp">Aktualisiere...</div>
@@ -364,7 +387,13 @@
     </footer>
 
     <div id="methodik-info">
-      Die Seite zeigt eine geschätzte Auslastung der verschiedenen Bibliotheksbereiche an. Dazu wird halbstündlich die Anzahl der eingeloggten Endgeräte in den WLAN-Routern der einzelnen Bereiche erfasst. Daraus lässt sich die relative Auslastung abschätzen, die in einem Ampelsystem dargestellt wird. Der Chart zu jedem Bereich zeigt die heutige Entwicklung der Auslastung im Vergleich zum selben Wochentag der Vorwoche. Die nur über die Bibliothek zugänglichen Seminarräume J213, BS217 und BG335 sowie die Computerpools sind von der Berechnung ausgenommen.
+      Diese Seite zeigt eine geschätzte Auslastung der Arbeitsplätze der Bibliotheksbereiche der Universität Konstanz an. 
+      Dazu wird halbstündlich die Anzahl der eingeloggten Endgeräte in den WLAN-Routern erfasst. 
+      Daraus lässt sich die relative Auslastung abschätzen, die in einem Ampelsystem (geringe Auslastung bis sehr starke Auslastung) dargestellt wird. 
+      Eine Tendenz wie sich die Auslastung über die letze Stunde entwickelt hat lässt sich an den Pfeilen rechts oberhalb des Auslastungsbalkens ablesen.
+      Detailliertere Informationen zum Auslastungsverlauf sind durch Klick auf die jeweilge Kachel den Diagrammen zu jedem Bereich zu entnehmen.
+      Diese zeigen die Entwicklung der heutigen Auslastung im Vergleich zum selben Wochentag der Vorwoche. 
+      Die nur über die Bibliothek zugänglichen Seminarräume J213, BS217 und BG335 sowie die Computerpools sind von der Berechnung ausgenommen.
     </div>
 
     <div style="font-size: 0.85rem; color: var(--muted); background: #f1f5f9; padding: 12px 16px; border-radius: var(--radius-md); border-left: 4px solid #00a9e0; margin-top: 8px;">
@@ -432,9 +461,8 @@
         event.stopPropagation();
       }
 
-      // Karte aufklappen, falls noch geschlossen
-  const cardEl = document.getElementById(`card-${key}`);
-  if (cardEl) cardEl.classList.add('expanded');
+      const cardEl = document.getElementById(`card-${key}`);
+      if (cardEl) cardEl.classList.add('expanded');
       
       const infoView = document.getElementById(`info-${key}`);
       const chartView = document.getElementById(`chart-cont-${key}`);
@@ -490,15 +518,15 @@
     function calculateTotal(usePast = false, pastBucket = '') {
       let totalCap = 0, weightedPct = 0;
       cachedDataRows.forEach(row => {
-        const cap = capacityMap[row.key];
-        if (!cap) return;
+        const mapCap = capacityMap[row.key];
+        if (!mapCap) return;
         let pct = row.percentage;
         if (usePast && pastBucket && timeSeriesData.td[row.key]) {
           const entry = timeSeriesData.td[row.key].find(t => getTimeBucket(t.time) === pastBucket);
           if (entry) pct = parseFloat(entry.capacity) * 100;
         }
-        totalCap += cap;
-        weightedPct += (pct * cap);
+        totalCap += mapCap;
+        weightedPct += (pct * mapCap);
       });
       return { percentage: totalCap ? weightedPct / totalCap : 0, capacity: totalCap };
     }
@@ -508,23 +536,28 @@
       const currentBucket = getTimeBucket(globalTimeString);
       
       const totalLive = calculateTotal(false);
-      let totalDiff = '0%', totalClass = 'neutral', totalArrow = '—';
+
+      let totalArrowStyle = `color: #94a3b8; font-size: 1.2rem;`;
+
       if (currentBucket) {
         const parts = currentBucket.split(':');
         const pastBucket = `${String(parseInt(parts[0], 10) - 1).padStart(2, '0')}:${parts[1]}`;
         const totalPast = calculateTotal(true, pastBucket);
         const diff = totalLive.percentage - totalPast.percentage;
-        if (Math.abs(diff) > 0.5) {
-          totalClass = diff > 0 ? 'up' : 'down';
-          totalArrow = diff > 0 ? '▲' : '▼';
-          totalDiff = `${diff > 0 ? '+' : '-'}${Math.round(Math.abs(diff))}%`;
-        }
+
+        if (diff > 5) totalArrowStyle = `transform: rotate(-90deg); color: var(--red); font-size: 1.2rem;`;
+        else if (diff > 1) totalArrowStyle = `transform: rotate(-35deg); color: var(--red); font-size: 1.2rem;`;
+        else if (diff < -5) totalArrowStyle = `transform: rotate(90deg); color: var(--green); font-size: 1.2rem;`;
+        else if (diff < -1) totalArrowStyle = `transform: rotate(35deg); color: var(--green); font-size: 1.2rem;`;
+        else totalArrowStyle = `transform: rotate(0deg); color: #94a3b8; font-size: 1.2rem;`;
       }
-      
+
       document.getElementById('total-bar').style.width = `${Math.min(totalLive.percentage, 100)}%`;
       document.getElementById('total-bar').style.backgroundColor = getColor(totalLive.percentage);
-      document.getElementById('total-trend').className = `trend-box ${totalClass}`;
-      document.getElementById('total-trend').innerHTML = `<span>${totalDiff}</span> <span style="font-size:0.7rem;">${totalArrow}</span>`;
+
+      document.getElementById('total-trend').innerHTML = `
+        <div style="display: inline-block; transition: transform 0.2s; ${totalArrowStyle}">➔</div>
+      `;
 
       let sorted = [...cachedDataRows];
       if (currentSortMode === 'default') sorted.sort((a, b) => orderKeys.indexOf(a.key) - orderKeys.indexOf(b.key));
@@ -534,7 +567,9 @@
       sorted.forEach(row => {
         const cap = capacityMap[row.key] || 100;
         const label = areaLabelMap[row.key] || row.key;
-        let diffPct = '0%', trendClass = 'neutral', arrow = '—';
+        
+        let arrowIcon = '➔'; 
+        let arrowColor = '#64748b';
 
         if (currentBucket && timeSeriesData.td[row.key]) {
           const parts = currentBucket.split(':');
@@ -542,12 +577,34 @@
           const past = timeSeriesData.td[row.key].find(t => getTimeBucket(t.time) === pastBucket);
           if (past) {
             const diff = row.percentage - (parseFloat(past.capacity) * 100);
-            if (Math.abs(diff) > 0.5) {
-              trendClass = diff > 0 ? 'up' : 'down';
-              arrow = diff > 0 ? '▲' : '▼';
-              diffPct = `${diff > 0 ? '+' : '-'}${Math.round(Math.abs(diff))}%`;
+            
+            if (diff > 5) {
+              arrowIcon = '➔';
+              arrowColor = 'var(--red)';
+            } else if (diff > 1) {
+              arrowIcon = '➔';
+              arrowColor = 'var(--red)';
+            } else if (diff < -5) {
+              arrowIcon = '➔';
+              arrowColor = 'var(--green)';
+            } else if (diff < -1) {
+              arrowIcon = '➔';
+              arrowColor = 'var(--green)';
+            } else {
+              arrowIcon = '➔';
+              arrowColor = '#64748b';
             }
+
+            if (diff > 5) arrowStyle = `transform: rotate(-65deg); color: var(--red); font-size: 1.1rem;`;
+            else if (diff > 1) arrowStyle = `transform: rotate(-30deg); color: var(--red); font-size: 1.1rem;`;
+            else if (diff < -5) arrowStyle = `transform: rotate(65deg); color: var(--green); font-size: 1.1rem;`;
+            else if (diff < -1) arrowStyle = `transform: rotate(30deg); color: var(--green); font-size: 1.1rem;`;
+            else arrowStyle = `transform: rotate(0deg); color: #94a3b8; font-size: 1.1rem;`;
+          } else {
+            arrowStyle = `color: #94a3b8; font-size: 1.1rem;`;
           }
+        } else {
+          arrowStyle = `color: #94a3b8; font-size: 1.1rem;`;
         }
 
         const cardId = `card-${row.key}`;
@@ -567,8 +624,11 @@
                   <svg viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6h-6z"/></svg>
                 </button>
               </div>
+              <div style="display: inline-block; transition: transform 0.2s; ${arrowStyle}">
+                ${arrowIcon}
+              </div>
             </div>
-            
+
             <div class="progress-container">
               <div class="progress-track">
                 <div class="progress-bar" style="width:${Math.min(row.percentage, 100)}%; background-color:${getColor(row.percentage)};"></div>
@@ -577,9 +637,6 @@
             
             <div class="card-meta">
               <span>Kapazität: ${cap} Plätze</span>
-              <div class="trend-box ${trendClass}">
-                <span>${diffPct}</span> <span style="font-size:0.7rem;">${arrow}</span>
-              </div>
             </div>
 
             <div class="card-expansion-container">
@@ -667,7 +724,7 @@
           responsive: true, maintainAspectRatio: false,
           plugins: { 
             legend: { display: true, position: 'top', labels: { boxWidth: 10, font: { size: 8 } } },
-            tooltip: { enabled: false } // Deaktiviert Tooltips vollständig beim Hovern über Punkte
+            tooltip: { enabled: false }
           },
           layout: { padding: { left: 8, right: 8 } },
           scales: {
@@ -724,90 +781,85 @@
 
     document.addEventListener('DOMContentLoaded', initDashboard);
     
-  (function () {
-  const colors = ['#10b981', '#f9e216', '#f59e0b', '#ef4444', '#59c7eb', '#1e3a3a'];
-  let clicks = 0;
-  let firstClick = 0;
+    (function () {
+      const colors = ['#10b981', '#f9e216', '#f59e0b', '#ef4444', '#59c7eb', '#1e3a3a'];
+      let clicks = 0;
+      let firstClick = 0;
 
-  function rainC() {
-    const canvas = document.createElement('canvas');
-    canvas.style.cssText =
-      'position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:9999;';
-    document.body.appendChild(canvas);
-    const ctx = canvas.getContext('2d');
+      function rainC() {
+        const canvas = document.createElement('canvas');
+        canvas.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:9999;';
+        document.body.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
 
-    function resize() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-    resize();
-    window.addEventListener('resize', resize);
+        function resize() {
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+        }
+        resize();
+        window.addEventListener('resize', resize);
 
-    const N = 160;
-    const pieces = Array.from({ length: N }, () => ({
-      x: Math.random() * canvas.width,
-      y: Math.random() * -canvas.height,
-      w: 6 + Math.random() * 6,
-      h: 8 + Math.random() * 8,
-      color: colors[(Math.random() * colors.length) | 0],
-      vy: 2 + Math.random() * 3,
-      vx: -1.5 + Math.random() * 3,
-      rot: Math.random() * Math.PI,
-      vr: -0.15 + Math.random() * 0.3
-    }));
+        const N = 160;
+        const pieces = Array.from({ length: N }, () => ({
+          x: Math.random() * canvas.width,
+          y: Math.random() * -canvas.height,
+          w: 6 + Math.random() * 6,
+          h: 8 + Math.random() * 8,
+          color: colors[(Math.random() * colors.length) | 0],
+          vy: 2 + Math.random() * 3,
+          vx: -1.5 + Math.random() * 3,
+          rot: Math.random() * Math.PI,
+          vr: -0.15 + Math.random() * 0.3
+        }));
 
-    const start = performance.now();
-    const DURATION = 7000; // ms
+        const start = performance.now();
+        const DURATION = 7000;
 
-    function frame(now) {
-      const elapsed = now - start;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+        function frame(now) {
+          const elapsed = now - start;
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      for (const p of pieces) {
-        p.x += p.vx;
-        p.y += p.vy;
-        p.rot += p.vr;
+          for (const p of pieces) {
+            p.x += p.vx;
+            p.y += p.vy;
+            p.rot += p.vr;
 
-        ctx.save();
-        ctx.translate(p.x, p.y);
-        ctx.rotate(p.rot);
-        
-        ctx.globalAlpha = elapsed > DURATION - 800
-          ? Math.max(0, (DURATION - elapsed) / 800)
-          : 1;
-        ctx.fillStyle = p.color;
-        ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
-        ctx.restore();
-      }
+            ctx.save();
+            ctx.translate(p.x, p.y);
+            ctx.rotate(p.rot);
+            
+            ctx.globalAlpha = elapsed > DURATION - 800 ? Math.max(0, (DURATION - elapsed) / 800) : 1;
+            ctx.fillStyle = p.color;
+            ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+            ctx.restore();
+          }
 
-      if (elapsed < DURATION) {
+          if (elapsed < DURATION) {
+            requestAnimationFrame(frame);
+          } else {
+            window.removeEventListener('resize', resize);
+            canvas.remove();
+          }
+        }
         requestAnimationFrame(frame);
-      } else {
-        window.removeEventListener('resize', resize);
-        canvas.remove();
       }
-    }
-    requestAnimationFrame(frame);
-  }
 
-  const pill = document.getElementById('pill-green');
-  if (pill) {
-    
-    pill.addEventListener('click', () => {
-      const now = Date.now();
-      
-      if (now - firstClick > 900) {
-        clicks = 0;
-        firstClick = now;
+      const pill = document.getElementById('pill-green');
+      if (pill) {
+        pill.addEventListener('click', () => {
+          const now = Date.now();
+          if (now - firstClick > 900) {
+            clicks = 0;
+            firstClick = now;
+          }
+          clicks++;
+          if (clicks >= 5) {
+            clicks = 0;
+            rainC();
+          }
+        });
       }
-      clicks++;
-      if (clicks >= 5) {
-        clicks = 0;
-        rainC();
-      }
-    });
-  }
-})();
+    })();
   </script>
 </body>
 </html>
