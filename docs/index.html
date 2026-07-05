@@ -204,7 +204,6 @@
     .card-tabs {
       display: flex;
       gap: 8px;
-      margin-bottom: 12px;
     }
 
     .tab-btn {
@@ -255,10 +254,6 @@
       font-size: 0.8rem;
       color: var(--muted);
       font-weight: 500;
-    }
-
-    .card.expanded .card-meta {
-      display: none;
     }
 
     .card-expansion-container {
@@ -592,17 +587,16 @@
               </div>
             </div>
 
-            <div class="card-tabs">
-              <button class="tab-btn" id="tab-btn-info-${row.key}" onclick="switchSubTab('${row.key}', 'info', event)">
-                <svg viewBox="0 0 24 24"><path d="M11 9h2V7h-2v2zm1 11c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-18C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h2v-6h-2v6z"/></svg>
-              </button>
-              <button class="tab-btn active" id="tab-btn-chart-${row.key}" onclick="switchSubTab('${row.key}', 'chart', event)">
-                <svg viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6h-6z"/></svg>
-              </button>
-            </div>
-
             <div class="card-meta">
               <span>Kapazität: ${row.seats} Plätze</span>
+              <div class="card-tabs">
+                <button class="tab-btn" id="tab-btn-info-${row.key}" onclick="switchSubTab('${row.key}', 'info', event)">
+                  <svg viewBox="0 0 24 24"><path d="M11 9h2V7h-2v2zm1 11c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-18C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h2v-6h-2v6z"/></svg>
+                </button>
+                <button class="tab-btn" id="tab-btn-chart-${row.key}" onclick="switchSubTab('${row.key}', 'chart', event)">
+                  <svg viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6h-6z"/></svg>
+                </button>
+              </div>
             </div>
 
             <div class="card-expansion-container">
