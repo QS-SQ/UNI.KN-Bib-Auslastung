@@ -466,6 +466,8 @@
       
       if (isExpanded) {
         cardEl.classList.remove('expanded');
+        document.getElementById(`tab-btn-info-${key}`)?.classList.remove('active');
+        document.getElementById(`tab-btn-chart-${key}`)?.classList.remove('active');
       } else {
         cardEl.classList.add('expanded');
         switchSubTab(key, 'chart');
