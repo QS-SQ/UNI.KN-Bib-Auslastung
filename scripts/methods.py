@@ -8,6 +8,7 @@ from io import BytesIO, StringIO
 import pandas as pd
 import imaplib
 import email
+from datetime import timedelta
 
 def extract_csv_attachment(mail, id):
     """
@@ -190,12 +191,12 @@ def map_router_to_location(df_data):
     ))
     
     df_data['AP Name'] = df_data['AP Name'].astype(str).str.strip()
-    df_data['Location'] = df_data['AP Name'].map(router_area_map)
+    df_data['area'] = df_data['AP Name'].map(router_area_map)
 
     flag = 'ok'
     
     # check if there are any AP Names that could not be mapped to a location
-    unmapped_aps = df_data[df_data['Location'].isna()]['AP Name'].unique()
+    unmapped_aps = df_data[df_data['area'].isna()]['AP Name'].unique()
     if len(unmapped_aps) > 0:
         flag = 'the following AP Names could not be mapped to a location: ' + ', '.join(unmapped_aps)
             
@@ -239,7 +240,7 @@ def calc_occupancy(df_data):
         if loc in ['nf', 'na']:
             continue
             
-        loc_data = df_data[df_data['Location'] == loc]
+        loc_data = df_data[df_data['area'] == loc]
         if not loc_data.empty:
             avg_users = loc_data['Average Number of Users'].sum()
             occupancy = min(avg_users * capacity, 1.0) * 100
@@ -247,22 +248,50 @@ def calc_occupancy(df_data):
         else:
             occup[loc] = 0.0
             flag = f'No data found for location {loc}, occupancy set to 0' if flag == 'ok' else flag + f'; No data found for location {loc}, occupancy set to 0'
-       
-    return occup, flag
+    
+    seats_str = os.getenv("SEATS")
+    if not seats_str:
+        return occup, 'No seats data found in environment'
+    
+    # calculate total occupancy as weighted average of all locations based on their seat counts
+    try:
+        seats_df = pd.read_csv(StringIO(seats_str), sep=';')
+        seats_map = dict(zip(
+            seats_df.iloc[:, 0].astype(str).str.strip(), 
+            seats_df.iloc[:, 1].astype(float)
+        ))
+    except Exception as e:
+        return occup, f'Error processing SEATS string configuration: {e}'
+    
+    total_seats = sum(seats_map.get(loc, 0) for loc in occup.keys())
+    if total_seats > 0:
+        total_occupancy = sum(occup.get(loc, 0) * seats_map.get(loc, 0) for loc in occup.keys()) / total_seats
+        occup['TOTAL'] = round(total_occupancy, 2)
+    else:
+        occup['TOTAL'] = 0.0
+        flag = 'No seat data available for any location, total occupancy set to 0' if flag == 'ok' else flag + '; No seat data available for any location, total occupancy set to 0' 
+    
+    # convert occupancy values to dataframe
+    occ_df = pd.DataFrame(list(occup.items()), columns=['area', 'capacity']) 
+    
+    # add a column for the total number of seats for each location
+    seats_map['TOTAL'] = sum(seats_map.values())
+    occ_df['seats'] = occ_df['area'].map(seats_map).fillna(0).astype(int)
+    
+    return occ_df, flag
 
 
-def save_as_csv(occupancy, path, time=None):
+def save_as_csv(occ_df, path, time=None):
     """ 
     Save occupancy values to a csv file. 
     
     Args:
-        occupancy (dict): Dictionary containing the occupancy for each location.
+        occ_df (DataFrame): DataFrame containing the occupancy for each location.
         path (str): Path to save the csv.
         time (str): Timestamp from data.
     """
     
     # save occupancy values to a csv file
-    occ_df = pd.DataFrame(list(occupancy.items()), columns=['Location', 'Occupancy'])
     occ_df.to_csv(path, index=False)
     
     # append timestamp to the csv file
@@ -327,7 +356,7 @@ def process_serial_dfs(dfs, df_timestamps):
     
     # Merge factor metadata definitions
     df_area = pd.merge(df_area, df_capacity, on="area", how="left")
-    df_area["capacity"] = (df_area["Average Number of Users"] * df_area["factor"]).clip(upper=1.0)
+    df_area["capacity"] = round((df_area["Average Number of Users"] * df_area["factor"]).clip(upper=1.0) * 100,2)
     # remove all rows where area is 'na' and reset index
     df_area = df_area[df_area["area"] != "na"].reset_index(drop=True)
     # remove all rows with timestamp before 8am and reset index
@@ -336,3 +365,79 @@ def process_serial_dfs(dfs, df_timestamps):
     df_area = df_area.drop(columns=["Average Number of Users", "factor"])
     
     return df_area, 'ok'
+
+
+def calculate_indication(df_data, occ, current_time):
+    """
+    Calculate the occupancy difference and indication for each location based on the current 
+    and previous occupancy values.
+
+    Args:
+        df_data (DataFrame): DataFrame containing the occupancy values for each area and time.
+        occ (DataFrame): DataFrame containing the current occupancy values for each area.
+        current_time (str): Current timestamp for which the indication is being calculated.
+        
+    Returns:
+        occ (DataFrame): Updated DataFrame containing the current occupancy values for each area with indication.
+        flag (str): Status flag indicating success or failure of the indication calculation process.
+    """
+    
+    df_diff = df_data.copy()
+    
+    # convert time column to datetime and only keep rows where time is between 65 and 55 minutes before current time
+    df_diff['time'] = pd.to_datetime(df_diff['time'])
+    df_diff = df_diff[(df_diff['time'] >= current_time - timedelta(minutes=65)) & (df_diff['time'] <= current_time - timedelta(minutes=55))]
+    
+    # add new column to df_diff with current time and capacity from occ DataFrame
+    df_diff['time_current'] = current_time
+    df_diff['capacity_current'] = df_diff['area'].map(occ.set_index('area')['capacity']).fillna(0).astype(float)
+    df_diff['occupancy_diff'] = df_diff['capacity_current'] - df_diff['capacity']
+    
+    # calculate total occupancy difference and add it to the df_diff DataFrame
+    seats_str = os.getenv('SEATS')
+    if not seats_str:
+        flag = 'No seats data found in environment'
+        total_occupancy_diff = df_diff['occupancy_diff'].sum() / 9
+    else:
+        try:
+            seats_df = pd.read_csv(StringIO(seats_str), sep=';')
+            seats_map = dict(zip(
+                seats_df.iloc[:, 0].astype(str).str.strip(), 
+                seats_df.iloc[:, 1].astype(float)
+            ))
+        except Exception as e:
+            flag = f'Error reading seats data from environment: {e}'
+
+        # calculate total occupancy weigthed by the number of seats for each location
+        df_diff['seats'] = df_diff['area'].map(seats_map).fillna(0).astype(float)
+        total_occupancy_diff = (df_diff['occupancy_diff'] * df_diff['seats']).sum() / df_diff['seats'].sum()
+        
+    # add the total occupancy difference to the df_diff DataFrame in a new row with area 'TOTAL'
+    df_diff = pd.concat([df_diff, pd.DataFrame([{
+        'area': 'TOTAL',
+        'time_current': current_time,
+        'capacity_current': occ.set_index('area').loc['TOTAL', 'capacity'],
+        'occupancy_diff': total_occupancy_diff,
+        'seats': 0
+    }])], ignore_index=True)
+    
+    # for each location check the difference and set the indication to -2, -1, 0, 1, or 2 in the occ DataFrame
+    def get_indication(diff):
+        if diff > 7:
+            return 2
+        elif diff > 2:
+            return 1
+        elif diff > -2:
+            return 0
+        elif diff > -7:
+            return -1
+        else:
+            return -2
+    
+    df_diff['indication'] = df_diff['occupancy_diff'].apply(get_indication)
+    
+    # add the indication to the occ DataFrame
+    indication_map = df_diff.set_index('area')['indication']
+    occ['indication'] = occ['area'].map(indication_map).fillna(0).astype(int)
+    
+    return occ, 'ok'

@@ -6,13 +6,13 @@ Main File for the UNI.KN-Bib-Auslastung project used in the action workflow
 import os
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
-from methods import read_email, preprocess_data, map_router_to_location, calc_occupancy, save_as_csv, process_serial_dfs
+from methods import read_email, preprocess_data, map_router_to_location, calc_occupancy, save_as_csv, process_serial_dfs, calculate_indication
 
 # only for local execution
 load_dotenv()
 
 ### Calculate Current Occupancy ###
-flags = ['not read', 'not processed', 'not mapped', 'not calculated']
+flags = ['not read', 'not processed', 'not mapped', 'not calculated', 'no indication']
 
 dfs_data, timestamps, flags[0] = read_email()
 
@@ -25,16 +25,6 @@ if flags[1] == 'ok':
 if flags[2] != 'No mapping found in environment':
     occ, flags[3] = calc_occupancy(df_data)
     
-if flags[3] == 'ok':
-    path = os.path.join(os.getcwd(), 'docs/temp/oc_values.csv')
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-    save_as_csv(occ, path, timestamps[-1])
-
-# return error message if any of the flags is not 'ok'
-if any(flag != 'ok' for flag in flags):
-    error_message = 'Error in processing current occupancy: ' + '; '.join([str(flag) for flag in flags if flag != 'ok'])
-    print(error_message)
- 
    
 ### calculate occupancy today and last week ###
 flags_lw = ['not read', 'lw not processed', 'today not processed']
@@ -45,6 +35,7 @@ dfs_lw, timestamps_lw, flags_lw[0] = read_email(start_date, end_date)
 
 if flags_lw[0] == 'ok':
     df_lw, flags_lw[1]= process_serial_dfs(dfs_lw, timestamps_lw)
+    
 if flags_lw[1] == 'ok':
     # remove all dfs from dfs_data that have a timestamp that is not from today
     dfs_data_today = [df for df, ts in zip(dfs_data, timestamps) if ts.strftime("%Y-%m-%d") == datetime.now().strftime("%Y-%m-%d")]   
@@ -67,3 +58,18 @@ if flags_lw[2] == 'ok':
 if any(flag != 'ok' for flag in flags_lw):
     error_message = 'Error in processing occupancy for plots: ' + '; '.join([str(flag) for flag in flags_lw if flag != 'ok'])
     print(error_message)
+
+
+### calculate indication over last hour ###
+if flags[3] == 'ok':
+    occ, flags[4] = calculate_indication(df_today, occ, timestamps_today[-1])
+
+if flags[4] == 'ok':
+    path = os.path.join(os.getcwd(), 'docs/temp/oc_values.csv')
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    save_as_csv(occ, path, timestamps[-1])
+
+# return error message if any of the flags is not 'ok'
+if any(flag != 'ok' for flag in flags):
+    error_message = 'Error in processing current occupancy: ' + '; '.join([str(flag) for flag in flags if flag != 'ok'])
+    print(error_message)  

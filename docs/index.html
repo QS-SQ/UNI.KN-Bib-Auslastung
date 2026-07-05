@@ -426,7 +426,6 @@
   </div>
 
   <script>
-    const capacityMap = { 'BSGA': 165, 'JEAP': 140, 'JGAR': 180, 'BSEA': 90, 'BSBG': 25, 'BSLS': 59, 'BG23': 85, 'BG56': 65, 'INFO': 160 };
     const orderKeys = ['BSGA','BG23', 'BG56', 'BSEA',  'BSBG','BSLS', 'JEAP', 'JGAR', 'INFO'];
     const areaLabelMap = { 'INFO': 'Info-Zentrum', 'BG23': 'Ebenen BG2/BG3', 'BG56': 'Ebenen BG5/BG6', 'BSLS': 'Lesesaal (BS6-BG6)', 'BSBG': 'Übergang BS5-BG5', 'BSEA': 'Übergang BS2/3-BG2/3', 'BSGA': 'Buchbereich BS', 'JGAR': 'Arbeitsräume J', 'JEAP': 'Einzelarbeitsplätze J' };
     const areaDescriptionMap = { 'INFO': '160 Arbeitsplätze im Infozentrum, Bibcafe und allen anderen Bereiche auf BA.', 'BG23': '145 Arbeitsplätze auf den Ebenen BG2/BG3 und BH2/BH3 (exkl. BG335).', 'BG56': '65 Einzelarbeitsplätze auf Ebene BG5 und Ebene BG6.', 'BSLS': '59 Arbeitsplätze im Lesesaal im Übergang von BS6 nach BG6.', 'BSBG': '5 Gruppenarbeitsräume im Übergang von BS5 nach BG5.', 'BSEA': '90 Arbeitsplätze in den Fluren von BS2/BS3 nach BG2/BG3 sowie an den großen Tischen auf BS3 in Richtung Übergang BG3.', 'BSGA': '165 Arbeitsplätze auf den Ebenen BS2 bis BS6 (exkl. BS217).', 'JGAR': '54 Arbeitsräume in J2-J6.', 'JEAP': '140 Einzelarbeitsplätze in J2-J6 (exkl. J213).' };
@@ -436,6 +435,7 @@
     let activeCharts = {};
     let globalTimeString = "12:00";
     let cachedDataRows = [];
+    let totalRowData = null; 
 
     const leftColorBarPlugin = {
       id: 'leftColorBar',
@@ -443,10 +443,10 @@
         const { ctx, chartArea: { left } } = chart;
         const yScale = chart.scales.y;
         const y0 = yScale.getPixelForValue(0);
-        const y40 = yScale.getPixelForValue(0.4);
-        const y60 = yScale.getPixelForValue(0.6);
-        const y80 = yScale.getPixelForValue(0.8);
-        const y100 = yScale.getPixelForValue(1.03);
+        const y40 = yScale.getPixelForValue(40);
+        const y60 = yScale.getPixelForValue(60);
+        const y80 = yScale.getPixelForValue(80);
+        const y100 = yScale.getPixelForValue(103);
 
         ctx.save();
         const barWidth = 6; 
@@ -529,6 +529,21 @@
       return 'var(--green)';
     }
 
+    // Hilfsfunktion zum Generieren der Style- & Pfeilwerte
+    function getArrowProperties(indication) {
+      let arrowStyle = `color: #94a3b8; font-size: 1.1rem; transform: rotate(0deg);`;
+      if (indication === 2) {
+        arrowStyle = `transform: rotate(-65deg); color: var(--red); font-size: 1.1rem;`;
+      } else if (indication === 1) {
+        arrowStyle = `transform: rotate(-30deg); color: var(--red); font-size: 1.1rem;`;
+      } else if (indication === -1) {
+        arrowStyle = `transform: rotate(30deg); color: var(--green); font-size: 1.1rem;`;
+      } else if (indication === -2) {
+        arrowStyle = `transform: rotate(65deg); color: var(--green); font-size: 1.1rem;`;
+      }
+      return arrowStyle;
+    }
+
     async function parseCSVFile(url) {
       const response = await fetch(url);
       if (!response.ok) return {};
@@ -545,49 +560,19 @@
       return result;
     }
 
-    function calculateTotal(usePast = false, pastBucket = '') {
-      let totalCap = 0, weightedPct = 0;
-      cachedDataRows.forEach(row => {
-        const mapCap = capacityMap[row.key];
-        if (!mapCap) return;
-        let pct = row.percentage;
-        if (usePast && pastBucket && timeSeriesData.td[row.key]) {
-          const entry = timeSeriesData.td[row.key].find(t => getTimeBucket(t.time) === pastBucket);
-          if (entry) pct = parseFloat(entry.capacity) * 100;
-        }
-        totalCap += mapCap;
-        weightedPct += (pct * mapCap);
-      });
-      return { percentage: totalCap ? weightedPct / totalCap : 0, capacity: totalCap };
-    }
-
     function renderDashboard() {
       const grid = document.getElementById('live-dashboard');
-      const currentBucket = getTimeBucket(globalTimeString);
       
-      const totalLive = calculateTotal(false);
-
-      let totalArrowStyle = `color: #94a3b8; font-size: 1.1rem;`;
-
-      if (currentBucket) {
-        const parts = currentBucket.split(':');
-        const pastBucket = `${String(parseInt(parts[0], 10) - 1).padStart(2, '0')}:${parts[1]}`;
-        const totalPast = calculateTotal(true, pastBucket);
-        const diff = totalLive.percentage - totalPast.percentage;
-
-        if (diff > 5) totalArrowStyle = `transform: rotate(-65deg); color: var(--red); font-size: 1.1rem;`;
-        else if (diff > 1) totalArrowStyle = `transform: rotate(-35deg); color: var(--red); font-size: 1.1rem;`;
-        else if (diff < -5) totalArrowStyle = `transform: rotate(65deg); color: var(--green); font-size: 1.1rem;`;
-        else if (diff < -1) totalArrowStyle = `transform: rotate(35deg); color: var(--green); font-size: 1.1rem;`;
-        else totalArrowStyle = `transform: rotate(0deg); color: #94a3b8; font-size: 1.1rem;`;
+      // Nutzt direkt die in Python vorbereiteten TOTAL-Werte für die Oberseite des Dashboards
+      if (totalRowData) {
+        document.getElementById('total-bar').style.width = `${Math.min(totalRowData.percentage, 100)}%`;
+        document.getElementById('total-bar').style.backgroundColor = getColor(totalRowData.percentage);
+        
+        const totalArrowStyle = getArrowProperties(totalRowData.indication);
+        document.getElementById('total-trend').innerHTML = `
+          <div style="display: inline-block; transition: transform 0.2s; ${totalArrowStyle}">➔</div>
+        `;
       }
-
-      document.getElementById('total-bar').style.width = `${Math.min(totalLive.percentage, 100)}%`;
-      document.getElementById('total-bar').style.backgroundColor = getColor(totalLive.percentage);
-
-      document.getElementById('total-trend').innerHTML = `
-        <div style="display: inline-block; transition: transform 0.2s; ${totalArrowStyle}">➔</div>
-      `;
 
       let sorted = [...cachedDataRows];
       if (currentSortMode === 'default') sorted.sort((a, b) => orderKeys.indexOf(a.key) - orderKeys.indexOf(b.key));
@@ -595,27 +580,8 @@
 
       let html = '';
       sorted.forEach(row => {
-        const cap = capacityMap[row.key] || 100;
         const label = areaLabelMap[row.key] || row.key;
-        
-        let arrowIcon = '➔'; 
-        let arrowStyle = `color: #94a3b8; font-size: 1.1rem;`;
-
-        if (currentBucket && timeSeriesData.td[row.key]) {
-          const parts = currentBucket.split(':');
-          const pastBucket = `${String(parseInt(parts[0], 10) - 1).padStart(2, '0')}:${parts[1]}`;
-          const past = timeSeriesData.td[row.key].find(t => getTimeBucket(t.time) === pastBucket);
-          if (past) {
-            const diff = row.percentage - (parseFloat(past.capacity) * 100);
-            
-            if (diff > 5) arrowStyle = `transform: rotate(-65deg); color: var(--red); font-size: 1.1rem;`;
-            else if (diff > 1) arrowStyle = `transform: rotate(-30deg); color: var(--red); font-size: 1.1rem;`;
-            else if (diff < -5) arrowStyle = `transform: rotate(65deg); color: var(--green); font-size: 1.1rem;`;
-            else if (diff < -1) arrowStyle = `transform: rotate(30deg); color: var(--green); font-size: 1.1rem;`;
-            else arrowStyle = `transform: rotate(0deg); color: #94a3b8; font-size: 1.1rem;`;
-          }
-        }
-
+        const arrowStyle = getArrowProperties(row.indication);
         const cardId = `card-${row.key}`;
 
         html += `
@@ -634,7 +600,7 @@
                 </button>
               </div>
               <div style="display: inline-block; transition: transform 0.2s; ${arrowStyle}">
-                ${arrowIcon}
+                ➔
               </div>
             </div>
 
@@ -645,7 +611,7 @@
             </div>
             
             <div class="card-meta">
-              <span>Kapazität: ${cap} Plätze</span>
+              <span>Kapazität: ${row.seats} Plätze</span>
             </div>
 
             <div class="card-expansion-container">
@@ -739,10 +705,10 @@
           scales: {
             y: { 
               min: 0, 
-              max: 1.03, 
+              max: 103, 
               ticks: { 
                 display: false,
-                stepSize: 0.2 
+                stepSize: 20 
               }, 
               grid: { color: '#f1f5f9' } 
             },
@@ -762,10 +728,11 @@
         
         const lines = (await liveRes.text()).split('\n');
         cachedDataRows = [];
+        totalRowData = null;
         let ts = '';
         
         lines.forEach(line => {
-          if (!line.trim()) return;
+          if (!line.trim() || line.toLowerCase().startsWith('area')) return;
           const parts = line.split(line.includes(';') ? ';' : ',');
           if (parts.length < 2) return;
           const k = parts[0].trim();
@@ -779,10 +746,18 @@
             if (timeMatch) globalTimeString = timeMatch[1];
           } else {
             const pct = parseFloat(v);
-            if (!isNaN(pct)) cachedDataRows.push({ key: k, percentage: pct });
+            const seats = parts[2] ? parseInt(parts[2].trim(), 10) : 0;
+            const indication = parts[3] ? parseInt(parts[3].trim(), 10) : 0;
+            
+            if (!isNaN(pct)) {
+              if (k.toUpperCase() === 'TOTAL') {
+                totalRowData = { key: k, percentage: pct, seats: seats, indication: indication };
+              } else {
+                cachedDataRows.push({ key: k, percentage: pct, seats: seats, indication: indication });
+              }
+            }
           }
         });
-
 
         document.getElementById('update-time').innerHTML = `<span class="status-dot"></span> ` + (ts || `Stand: ${getFormattedShortDate()}`);
         renderDashboard();
