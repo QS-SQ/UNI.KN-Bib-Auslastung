@@ -38,7 +38,8 @@ jobs:
       PORT: "${{ secrets.PORT }}"
       SENDER: "${{ secrets.SENDER }}"
       SERVER: "${{ secrets.SERVER }}"
-      USER: "${{ secrets.USER }}"      
+      USER: "${{ secrets.USER }}" 
+      SEATS: "${{ secrets.SEATS }}"     
 
     steps:
       - name: Check out repository

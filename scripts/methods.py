@@ -382,11 +382,16 @@ def calculate_indication(df_data, occ, current_time):
         flag (str): Status flag indicating success or failure of the indication calculation process.
     """
     
+    flag = 'ok'
     df_diff = df_data.copy()
     
     # convert time column to datetime and only keep rows where time is between 65 and 55 minutes before current time
     df_diff['time'] = pd.to_datetime(df_diff['time'])
     df_diff = df_diff[(df_diff['time'] >= current_time - timedelta(minutes=65)) & (df_diff['time'] <= current_time - timedelta(minutes=55))]
+    
+    # if dataframe is empty keep 08:00 values
+    if df_diff.empty:
+        df_diff = df_data[df_data['time'] == '08:00']
     
     # add new column to df_diff with current time and capacity from occ DataFrame
     df_diff['time_current'] = current_time
@@ -440,4 +445,4 @@ def calculate_indication(df_data, occ, current_time):
     indication_map = df_diff.set_index('area')['indication']
     occ['indication'] = occ['area'].map(indication_map).fillna(0).astype(int)
     
-    return occ, 'ok'
+    return occ, flag
