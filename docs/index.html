@@ -202,27 +202,16 @@
     }
 
     .card-tabs {
-      display: none;
-      gap: 4px;
-      background: #f1f5f9;
-      padding: 3px;
-      border-radius: 8px;
-      flex-shrink: 0;
-    }
-
-    .card.expanded .card-tabs {
       display: flex;
-    }
-
-    .card.expanded .card-top > div[style*="transition"] {
-      display: none !important;
+      gap: 8px;
+      margin-bottom: 12px;
     }
 
     .tab-btn {
       background: none;
       border: none;
       color: var(--muted);
-      padding: 6px;
+      padding: 2px;
       border-radius: 6px;
       cursor: pointer;
       transition: all 0.15s;
@@ -232,15 +221,17 @@
     }
 
     .tab-btn svg {
-      width: 16px;
-      height: 16px;
+      width: 14px;
+      height: 14px;
       fill: currentColor;
     }
 
-    .tab-btn.active {
-      background: var(--surface);
+    .tab-btn:hover {
       color: var(--text);
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .tab-btn.active {
+      color: #00a9e0;
     }
 
     .progress-container { margin-bottom: 14px; }
@@ -590,15 +581,6 @@
               <div class="card-title">
                 <span>${label}</span>
               </div>
-              
-              <div class="card-tabs">
-                <button class="tab-btn" id="tab-btn-info-${row.key}" onclick="switchSubTab('${row.key}', 'info', event)">
-                  <svg viewBox="0 0 24 24"><path d="M11 9h2V7h-2v2zm1 11c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-18C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h2v-6h-2v6z"/></svg>
-                </button>
-                <button class="tab-btn active" id="tab-btn-chart-${row.key}" onclick="switchSubTab('${row.key}', 'chart', event)">
-                  <svg viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6h-6z"/></svg>
-                </button>
-              </div>
               <div style="display: inline-block; transition: transform 0.2s; ${arrowStyle}">
                 ➔
               </div>
@@ -609,7 +591,16 @@
                 <div class="progress-bar" style="width:${Math.min(row.percentage, 100)}%; background-color:${getColor(row.percentage)};"></div>
               </div>
             </div>
-            
+
+            <div class="card-tabs">
+              <button class="tab-btn" id="tab-btn-info-${row.key}" onclick="switchSubTab('${row.key}', 'info', event)">
+                <svg viewBox="0 0 24 24"><path d="M11 9h2V7h-2v2zm1 11c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-18C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h2v-6h-2v6z"/></svg>
+              </button>
+              <button class="tab-btn active" id="tab-btn-chart-${row.key}" onclick="switchSubTab('${row.key}', 'chart', event)">
+                <svg viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6h-6z"/></svg>
+              </button>
+            </div>
+
             <div class="card-meta">
               <span>Kapazität: ${row.seats} Plätze</span>
             </div>
