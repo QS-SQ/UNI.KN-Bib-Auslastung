@@ -341,10 +341,54 @@
       box-shadow: var(--shadow);
     }
 
+    /* Optimiertes Verhalten für mobile Bildschirme */
     @media (max-width: 768px) {
-      .header-panel { grid-template-columns: 1fr; gap: 24px; }
-      .header-right-content { align-items: flex-start; gap: 16px; justify-content: flex-start; }
-      .controls-row { align-items: flex-start; }
+      .header-panel { 
+        grid-template-columns: 1fr; 
+        gap: 16px; 
+      }
+      
+      /* Blendet das Logo in der Handyansicht aus */
+      .panel-logo { 
+        display: none; 
+      }
+      
+      .header-right-content { 
+        align-items: stretch; 
+        gap: 12px; 
+        justify-content: flex-start; 
+        width: 100%;
+      }
+      
+      /* Button und Timestamp nebeneinander */
+      .controls-row { 
+        flex-direction: row-reverse; 
+        justify-content: space-between; 
+        align-items: center; 
+        gap: 12px;
+      }
+
+      /* Optimierung für Legende und Methodik-Button */
+      .footer-panel {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+      }
+
+      .n-bib-info-box {
+        max-width: 100%;
+      }
+
+      .legend {
+        display: flex;
+        justify-content: space-between; /* Drückt Farbpunkte nach links und Button nach rechts */
+        align-items: center;
+        width: 100%;
+      }
+
+      .legend-item:last-of-type {
+        margin-right: auto; 
+      }
     }
   </style>
 </head>
