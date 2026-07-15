@@ -244,6 +244,11 @@ def calc_occupancy(df_data):
         if not loc_data.empty:
             avg_users = loc_data['Average Number of Users'].sum()
             occupancy = min(avg_users * capacity, 1.0) * 100
+            if occupancy > 90:
+                occupancy = 100
+            if occupancy > 85 and occupancy <= 90:
+                # scale occupancy to 85-100 if it is between 85 and 90
+                occupancy = 85 + (occupancy - 85) * 3
             occup[loc] = round(occupancy, 2)
         else:
             occup[loc] = 0.0
