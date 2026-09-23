@@ -34,7 +34,7 @@ if flags[1] == 'ok':
 if flags[2] == 'ok':
     df_data, flags[3] = map_router_to_location(df_data, config)
     
-if flags[3] != 'No mapping found in environment':
+if flags[3] != 'ok':
     occ, flags[4] = calc_occupancy(df_data, config)
 
 
