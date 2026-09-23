@@ -1,1 +1,884 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Library usage at the University of Konstanz</title>
+  <link rel="icon" type="image/png" sizes="512x512" href="logo512.png">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+      --green: #10b981;
+      --yellow: #eab308;
+      --orange: #f97316;
+      --red: #ef4444;
+      --accent: #0f172a;
+      --radius-lg: 16px;
+      --radius-md: 12px;
+    }
 
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      padding: 18px 16px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      gap: 16px;
+    }
+
+    .header-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 32px;
+      align-items: stretch;
+    }
+
+    .header-left-content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 13px;
+      width: 100%;
+    }
+
+    .title-wrapper {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .eyebrow {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .header-left-content h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin: 0;
+    }
+
+    .title-underline {
+      display: inline-block;
+      border-bottom: 3px solid #00a9e0;
+      padding-bottom: 4px;
+    }
+
+    .global-status {
+      background: #f1f5f9;
+      border-radius: var(--radius-md);
+      padding: 16px;
+      width: 100%;
+    }
+
+    .global-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .header-right-content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .panel-logo {
+      height: 52px; 
+      width: auto;
+      object-fit: contain;
+    }
+
+    .controls-row {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .sort-btn, .methodik-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 14px;
+      border-radius: var(--radius-md);
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .sort-btn:hover, .methodik-btn:hover {
+      background: #f8fafc;
+      border-color: var(--muted);
+    }
+
+    .header-timestamp {
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-weight: 500;
+      padding-right: 4px;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 6px; 
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 14px;
+      align-items: start;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.05);
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 600;
+      width: 100%;
+    }
+
+    .card-title span {
+      border-bottom: 2px solid #00a9e0;
+      padding-bottom: 2px;
+    }
+
+    .card-tabs {
+      display: flex;
+      gap: 8px;
+    }
+
+    .tab-btn {
+      background: none;
+      border: none;
+      color: var(--muted);
+      padding: 2px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .tab-btn svg {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+    }
+
+    .tab-btn:hover {
+      color: var(--text);
+    }
+
+    .tab-btn.active {
+      color: #00a9e0;
+    }
+
+    .progress-container { margin-bottom: 14px; }
+    .progress-track {
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .card-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .card-expansion-container {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), margin-top 0.3s ease;
+    }
+
+    .card.expanded .card-expansion-container {
+      max-height: 250px;
+      border-top: 1px solid var(--border);
+      margin-top: 14px;
+      padding-top: 14px;
+    }
+
+    .card-info-text, .card-chart-container {
+      display: none;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .card-info-text.active-view, .card-chart-container.active-view {
+      display: block;
+    }
+
+    .chart-layout-wrapper {
+      height: 170px;
+      position: relative;
+      width: 100%;
+    }
+
+    .trend-box { display: flex; align-items: center; gap: 4px; font-weight: 700; }
+    .trend-box.up { color: var(--red); }
+    .trend-box.down { color: var(--green); }
+    .trend-box.neutral { color: var(--muted); }
+
+    .footer-panel {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding-top: 2px;
+      border-top: none;
+    }
+
+    .n-bib-info-box {
+      font-size: 0.8rem; 
+      color: var(--muted); 
+      background: #f1f5f9; 
+      padding: 10px 14px; 
+      border-radius: var(--radius-md); 
+      border-left: 4px solid #00a9e0; 
+      line-height: 1.4;
+      max-width: 500px;
+    }
+
+    .legend { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+    .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+    .status-dot {
+      width: 4px;
+      height: 4px;
+      background-color: var(--green);
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    #methodik-info {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      font-size: 0.85rem;
+      color: var(--muted);
+      display: none;
+      box-shadow: var(--shadow);
+    }
+
+    /* Optimiertes Verhalten für mobile Bildschirme */
+    @media (max-width: 768px) {
+      .header-panel { 
+        grid-template-columns: 1fr; 
+        gap: 16px; 
+      }
+      
+      /* Blendet das Logo in der Handyansicht aus */
+      .panel-logo { 
+        display: none; 
+      }
+      
+      .header-right-content { 
+        align-items: stretch; 
+        gap: 12px; 
+        justify-content: flex-start; 
+        width: 100%;
+      }
+      
+      /* Button und Timestamp nebeneinander */
+      .controls-row { 
+        flex-direction: row-reverse; 
+        justify-content: space-between; 
+        align-items: center; 
+        gap: 12px;
+      }
+
+      /* Optimierung für Legende und Methodik-Button */
+      .footer-panel {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+      }
+
+      .n-bib-info-box {
+        max-width: 100%;
+      }
+
+      .legend {
+        display: flex;
+        justify-content: space-between; /* Drückt Farbpunkte nach links und Button nach rechts */
+        align-items: center;
+        width: 100%;
+      }
+
+      .legend-item:last-of-type {
+        margin-right: auto; 
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <header class="header-panel">
+      <div class="header-left-content">
+        <div class="title-wrapper">
+          <p class="eyebrow">Kommunikations-, Informations-, Medienzentrum (KIM)</p>
+          <h1><span class="title-underline">Aktuelle Auslastung der Bibliothek</span></h1>
+        </div>
+        
+        <div class="global-status">
+          <div class="global-info">
+            <span>Gesamtauslastung</span>
+            <div id="total-trend" class="trend-box neutral">--</div>
+          </div>
+          <div class="progress-track" style="height: 6px; margin: 0;">
+            <div id="total-bar" class="progress-bar"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="header-right-content">
+        <img src="logoUniKN.svg" alt="Logo" class="panel-logo">
+        
+        <div class="controls-row">
+          <button id="sort-button" class="sort-btn" onclick="cycleSort()">Sortierung: Standard</button>
+          <div id="update-time" class="header-timestamp">Aktualisiere...</div>
+        </div>
+      </div>
+    </header>
+
+    <main id="live-dashboard" class="dashboard-grid">
+      <p style="color: var(--muted); padding: 12px;">Lade Daten...</p>
+    </main>
+
+    <footer class="footer-panel">
+      <div class="n-bib-info-box">
+        In der <strong>N-Bibliothek</strong> gibt es weitere 100 Arbeitsplätze.<br>
+        Öffnungszeiten N: Mo.–Fr. 8:00–17:30 Uhr (Aug./Sept. bis 16:30 Uhr).
+      </div>
+      
+      <div class="legend">
+        <div class="legend-item" id="pill-green"><span class="dot" style="background: var(--green)"></span> gering</div>
+        <div class="legend-item"><span class="dot" style="background: var(--yellow)"></span> moderat</div>
+        <div class="legend-item"><span class="dot" style="background: var(--orange)"></span> stark</div>
+        <div class="legend-item"><span class="dot" style="background: var(--red)"></span> sehr stark</div>
+        <button class="methodik-btn" style="padding: 4px 10px; font-size: 0.75rem;" onclick="toggleMethodik()">Methodik</button>
+      </div>
+    </footer>
+
+    <div id="methodik-info">
+      Diese Seite zeigt eine geschätzte Auslastung der Arbeitsplätze der Bibliotheksbereiche der Universität Konstanz an. 
+      Dazu wird halbstündlich die Anzahl der eingeloggten Endgeräte in den WLAN-Routern erfasst. 
+      Daraus lässt sich die relative Auslastung abschätzen, die in einem Ampelsystem (geringe Auslastung bis sehr starke Auslastung) dargestellt wird. 
+      Eine Tendenz wie sich die Auslastung über die letze Stunde entwickelt hat lässt sich an den Pfeilen rechts oberhalb des Auslastungsbalkens ablesen.
+      Detailliertere Informationen zum Auslastungsverlauf sind durch Klick auf die jeweilge Kachel den Diagrammen zu jedem Bereich zu entnehmen.
+      Diese zeigen die Entwicklung der heutigen Auslastung im Vergleich zum selben Wochentag der Vorwoche. 
+      Die nur über die Bibliothek zugänglichen Seminarräume J213, BS217 und BG335 sowie die Computerpools sind von der Berechnung ausgenommen.
+    </div>
+
+  </div>
+
+  <script>
+    const orderKeys = ['BSGA','BG23', 'BG56', 'BSEA',  'BSBG','BSLS', 'JEAP', 'JGAR', 'INFO'];
+    const areaLabelMap = { 'INFO': 'Info-Zentrum', 'BG23': 'Ebenen BG2/BG3', 'BG56': 'Ebenen BG5/BG6', 'BSLS': 'Lesesaal (BS6-BG6)', 'BSBG': 'Übergang BS5-BG5', 'BSEA': 'Übergang BS2/3-BG2/3', 'BSGA': 'Buchbereich BS', 'JGAR': 'Arbeitsräume J', 'JEAP': 'Einzelarbeitsplätze J' };
+    const areaDescriptionMap = { 'INFO': '160 Arbeitsplätze im Infozentrum, Bibcafe und allen anderen Bereichen auf BA.', 'BG23': '145 Arbeitsplätze auf den Ebenen BG2/BG3 und BH2/BH3 (exkl. BG335).', 'BG56': '65 Einzelarbeitsplätze auf Ebene BG5 und Ebene BG6.', 'BSLS': '59 Arbeitsplätze im Lesesaal im Übergang von BS6 nach BG6.', 'BSBG': '5 Gruppenarbeitsräume im Übergang von BS5 nach BG5.', 'BSEA': '90 Arbeitsplätze in den Fluren von BS2/BS3 nach BG2/BG3 sowie an den großen Tischen auf BS3 in Richtung Übergang BG3.', 'BSGA': '165 Arbeitsplätze auf den Ebenen BS2 bis BS6 (exkl. BS217).', 'JGAR': '54 Arbeitsräume in J2-J6.', 'JEAP': '140 Einzelarbeitsplätze in J2-J6 (exkl. J213).' };
+
+    let currentSortMode = 'default';
+    let timeSeriesData = { lw: {}, td: {} };
+    let activeCharts = {};
+    let globalTimeString = "12:00";
+    let cachedDataRows = [];
+    let totalRowData = null; 
+
+    const leftColorBarPlugin = {
+      id: 'leftColorBar',
+      beforeDraw(chart) {
+        const { ctx, chartArea: { left } } = chart;
+        const yScale = chart.scales.y;
+        const y0 = yScale.getPixelForValue(0);
+        const y40 = yScale.getPixelForValue(40);
+        const y60 = yScale.getPixelForValue(60);
+        const y80 = yScale.getPixelForValue(80);
+        const y100 = yScale.getPixelForValue(103);
+
+        ctx.save();
+        const barWidth = 6; 
+        const barLeft = left + 2;
+        ctx.fillStyle = '#10b981'; ctx.fillRect(barLeft, y40, barWidth, y0 - y40);
+        ctx.fillStyle = '#eab308'; ctx.fillRect(barLeft, y60, barWidth, y40 - y60);
+        ctx.fillStyle = '#f97316'; ctx.fillRect(barLeft, y80, barWidth, y60 - y80);
+        ctx.fillStyle = '#ef4444'; ctx.fillRect(barLeft, y100, barWidth, y80 - y100);
+        ctx.restore();
+      }
+    };
+    Chart.register(leftColorBarPlugin);
+
+    function getFormattedShortDate() {
+      const today = new Date();
+      const day = String(today.getDate()).padStart(2, '0');
+      const month = String(today.getMonth() + 1).padStart(2, '0');
+      const year = String(today.getFullYear());
+      return `${day}.${month}.${year}`;
+    }
+
+    function toggleMethodik() {
+      const el = document.getElementById('methodik-info');
+      el.style.display = el.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function toggleCardExpansion(cardId, key) {
+      const cardEl = document.getElementById(cardId);
+      if (!cardEl) return;
+      const isExpanded = cardEl.classList.contains('expanded');
+      
+      if (isExpanded) {
+        cardEl.classList.remove('expanded');
+        document.getElementById(`tab-btn-info-${key}`)?.classList.remove('active');
+        document.getElementById(`tab-btn-chart-${key}`)?.classList.remove('active');
+      } else {
+        cardEl.classList.add('expanded');
+        switchSubTab(key, 'chart');
+      }
+    }
+
+    function switchSubTab(key, targetView, event) {
+      if (event) {
+        event.stopPropagation();
+      }
+
+      const cardEl = document.getElementById(`card-${key}`);
+      if (cardEl) cardEl.classList.add('expanded');
+      
+      const infoView = document.getElementById(`info-${key}`);
+      const chartView = document.getElementById(`chart-cont-${key}`);
+      const tabInfoBtn = document.getElementById(`tab-btn-info-${key}`);
+      const tabChartBtn = document.getElementById(`tab-btn-chart-${key}`);
+
+      if (targetView === 'info') {
+        chartView.classList.remove('active-view');
+        infoView.classList.add('active-view');
+        tabChartBtn.classList.remove('active');
+        tabInfoBtn.classList.add('active');
+      } else {
+        infoView.classList.remove('active-view');
+        chartView.classList.add('active-view');
+        tabInfoBtn.classList.remove('active');
+        tabChartBtn.classList.add('active');
+        setTimeout(() => { buildAreaChart(key); }, 50);
+      }
+    }
+
+    const getTimeBucket = (timeStr) => {
+      if (!timeStr) return '';
+      const parts = timeStr.trim().split(':');
+      const hour = parts[0].padStart(2, '0');
+      const minutes = parseInt(parts[1] || '0', 10);
+      const bucketMinutes = minutes < 15 || minutes >= 45 ? '00' : '30';
+      return `${minutes >= 45 ? String(parseInt(hour, 10) + 1).padStart(2, '0') : hour}:${bucketMinutes}`;
+    };
+
+    function getColor(pct) {
+      if (pct > 80) return 'var(--red)';
+      if (pct > 60) return 'var(--orange)';
+      if (pct > 40) return 'var(--yellow)';
+      return 'var(--green)';
+    }
+
+    // Hilfsfunktion zum Generieren der Style- & Pfeilwerte
+    function getArrowProperties(indication) {
+      let arrowStyle = `color: #94a3b8; font-size: 1.0rem; transform: rotate(0deg);`;
+      if (indication === 2) {
+        arrowStyle = `transform: rotate(-65deg); color: var(--red); font-size: 1.1rem;`;
+      } else if (indication === 1) {
+        arrowStyle = `transform: rotate(-30deg); color: var(--red); font-size: 1.1rem;`;
+      } else if (indication === -1) {
+        arrowStyle = `transform: rotate(30deg); color: var(--green); font-size: 1.1rem;`;
+      } else if (indication === -2) {
+        arrowStyle = `transform: rotate(65deg); color: var(--green); font-size: 1.1rem;`;
+      }
+      return arrowStyle;
+    }
+
+    async function parseCSVFile(url) {
+      const response = await fetch(url);
+      if (!response.ok) return {};
+      const text = await response.text();
+      const result = {};
+      text.split('\n').forEach(line => {
+        if (!line.trim() || line.toLowerCase().startsWith('area')) return;
+        const parts = line.split(line.includes(';') ? ';' : ',');
+        if (parts.length < 3) return;
+        const area = parts[0].trim();
+        if (!result[area]) result[area] = [];
+        result[area].push({ time: parts[1].trim(), capacity: parseFloat(parts[2].trim()) });
+      });
+      return result;
+    }
+
+    function renderDashboard() {
+      const grid = document.getElementById('live-dashboard');
+      
+      // Nutzt direkt die in Python vorbereiteten TOTAL-Werte für die Oberseite des Dashboards
+      if (totalRowData) {
+        document.getElementById('total-bar').style.width = `${Math.min(totalRowData.percentage, 100)}%`;
+        document.getElementById('total-bar').style.backgroundColor = getColor(totalRowData.percentage);
+        
+        const totalArrowStyle = getArrowProperties(totalRowData.indication);
+        document.getElementById('total-trend').innerHTML = `
+          <div style="display: inline-block; transition: transform 0.2s; ${totalArrowStyle}">➔</div>
+        `;
+      }
+
+      let sorted = [...cachedDataRows];
+      if (currentSortMode === 'default') sorted.sort((a, b) => orderKeys.indexOf(a.key) - orderKeys.indexOf(b.key));
+      else sorted.sort((a, b) => currentSortMode === 'fullest' ? b.percentage - a.percentage : a.percentage - b.percentage);
+
+      let html = '';
+      sorted.forEach(row => {
+        const label = areaLabelMap[row.key] || row.key;
+        const arrowStyle = getArrowProperties(row.indication);
+        const cardId = `card-${row.key}`;
+
+        html += `
+          <div class="card" id="${cardId}" onclick="toggleCardExpansion('${cardId}', '${row.key}')">
+            <div class="card-top">
+              <div class="card-title">
+                <span>${label}</span>
+              </div>
+              <div style="display: inline-block; transition: transform 0.2s; ${arrowStyle}">
+                ➔
+              </div>
+            </div>
+
+            <div class="progress-container">
+              <div class="progress-track">
+                <div class="progress-bar" style="width:${Math.min(row.percentage, 100)}%; background-color:${getColor(row.percentage)};"></div>
+              </div>
+            </div>
+
+            <div class="card-meta">
+              <span>Kapazität: ${row.seats} Plätze</span>
+              <div class="card-tabs">
+                <button class="tab-btn" id="tab-btn-chart-${row.key}" onclick="switchSubTab('${row.key}', 'chart', event)">
+                  <svg viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6h-6z"/></svg>
+                </button>
+                <button class="tab-btn" id="tab-btn-info-${row.key}" onclick="switchSubTab('${row.key}', 'info', event)">
+                  <svg viewBox="0 0 24 24"><path d="M11 9h2V7h-2v2zm1 11c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-18C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h2v-6h-2v6z"/></svg>
+                </button>
+                
+              </div>
+            </div>
+
+            <div class="card-expansion-container">
+              <div class="card-info-text" id="info-${row.key}">
+                ${areaDescriptionMap[row.key] || ''}
+              </div>
+              <div class="card-chart-container active-view" id="chart-cont-${row.key}">
+                <div class="chart-layout-wrapper">
+                  <canvas id="chart-${row.key}"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+      grid.innerHTML = html;
+    }
+
+    function cycleSort() {
+      const btn = document.getElementById('sort-button');
+      if (currentSortMode === 'default') { currentSortMode = 'fullest'; btn.innerText = 'Sortierung: Vollste zuerst'; }
+      else if (currentSortMode === 'fullest') { currentSortMode = 'emptiest'; btn.innerText = 'Sortierung: Leerste zuerst'; }
+      else { currentSortMode = 'default'; btn.innerText = 'Sortierung: Standard'; }
+      renderDashboard();
+    }
+
+    function buildAreaChart(key) {
+      const canvas = document.getElementById(`chart-${key}`);
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const lwRaw = timeSeriesData.lw[key] || [];
+      const tdRaw = timeSeriesData.td[key] || [];
+      const currentLiveBucket = getTimeBucket(globalTimeString);
+
+      const labels = lwRaw.map(d => getTimeBucket(d.time));
+      
+      let lastValidIndex = -1;
+      const todayData = lwRaw.map((d, index) => {
+        const bucket = getTimeBucket(d.time);
+        const e = tdRaw.find(t => getTimeBucket(t.time) === bucket);
+        if (e && bucket <= currentLiveBucket) {
+          lastValidIndex = index;
+          return parseFloat(e.capacity);
+        }
+        return null;
+      });
+      const lastWeekData = lwRaw.map(d => parseFloat(d.capacity));
+
+      let livePointColor = '#0f172a';
+      if (lastValidIndex !== -1 && todayData[lastValidIndex] !== null) {
+        const lastVal = todayData[lastValidIndex] * 100;
+        livePointColor = getColor(lastVal);
+      }
+
+      const pointRadiusArray = new Array(todayData.length).fill(0);
+      const pointBackgroundColorArray = new Array(todayData.length).fill('#0f172a');
+      if (lastValidIndex !== -1) {
+        pointRadiusArray[lastValidIndex] = 5;
+        pointBackgroundColorArray[lastValidIndex] = livePointColor;
+      }
+
+      if (activeCharts[key]) activeCharts[key].destroy();
+
+      activeCharts[key] = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            { 
+              label: 'Heute', 
+              data: todayData, 
+              borderColor: '#0f172a', 
+              borderWidth: 2.5, 
+              tension: 0.15, 
+              spanGaps: true,
+              pointRadius: pointRadiusArray,
+              pointBackgroundColor: pointBackgroundColorArray,
+              pointBorderColor: '#ffffff',
+              pointBorderWidth: 1.5
+            },
+            { label: 'Vorwoche', data: lastWeekData, borderColor: '#94a3b8', borderWidth: 1.5, borderDash: [4, 4], pointRadius: 0, tension: 0.15 }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { 
+            legend: { display: true, position: 'top', labels: { boxWidth: 10, font: { size: 8 } } },
+            tooltip: { enabled: false }
+          },
+          layout: { padding: { left: 8, right: 8 } },
+          scales: {
+            y: { 
+              min: 0, 
+              max: 103, 
+              ticks: { 
+                display: false,
+                stepSize: 20 
+              }, 
+              grid: { color: '#f1f5f9' } 
+            },
+            x: { grid: { display: false }, ticks: { font: { size: 9 }, autoSkip: true, maxTicksLimit: 6 } }
+          }
+        }
+      });
+    }
+
+    async function initDashboard() {
+      try {
+        const [lw, td, liveRes] = await Promise.all([
+          parseCSVFile('./temp/oc_values_lw.csv'), parseCSVFile('./temp/oc_values_today.csv'), fetch('./temp/oc_values.csv')
+        ]);
+        timeSeriesData.lw = lw; timeSeriesData.td = td;
+        if (!liveRes.ok) throw new Error();
+        
+        const lines = (await liveRes.text()).split('\n');
+        cachedDataRows = [];
+        totalRowData = null;
+        let ts = '';
+        
+        lines.forEach(line => {
+          if (!line.trim() || line.toLowerCase().startsWith('area')) return;
+          const parts = line.split(line.includes(';') ? ';' : ',');
+          if (parts.length < 2) return;
+          const k = parts[0].trim();
+          const v = parts[1].trim();
+
+          if (k.toLowerCase().startsWith('timestamp') || k.toLowerCase().startsWith('zeit')) {
+            const timeMatch = v.match(/(\d{2}:\d{2})/);
+            const timeOnly = timeMatch ? timeMatch[1] : v;
+            
+            ts = `Stand: ${getFormattedShortDate()} - ${timeOnly} Uhr`;
+            if (timeMatch) globalTimeString = timeMatch[1];
+          } else {
+            const pct = parseFloat(v);
+            const seats = parts[2] ? parseInt(parts[2].trim(), 10) : 0;
+            const indication = parts[3] ? parseInt(parts[3].trim(), 10) : 0;
+            
+            if (!isNaN(pct)) {
+              if (k.toUpperCase() === 'TOTAL') {
+                totalRowData = { key: k, percentage: pct, seats: seats, indication: indication };
+              } else {
+                cachedDataRows.push({ key: k, percentage: pct, seats: seats, indication: indication });
+              }
+            }
+          }
+        });
+
+        document.getElementById('update-time').innerHTML = `<span class="status-dot"></span> ` + (ts || `Stand: ${getFormattedShortDate()}`);
+        renderDashboard();
+      } catch (e) {
+        document.getElementById('live-dashboard').innerHTML = '<p style="color:var(--red); padding:12px;">Fehler beim Laden der Daten.</p>';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', initDashboard);
+    
+    (function () {
+      const colors = ['#10b981', '#f9e216', '#f59e0b', '#ef4444', '#59c7eb', '#1e3a3a'];
+      let clicks = 0;
+      let firstClick = 0;
+
+      function rainC() {
+        const canvas = document.createElement('canvas');
+        canvas.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:9999;';
+        document.body.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+
+        function resize() {
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+        }
+        resize();
+        window.addEventListener('resize', resize);
+
+        const N = 160;
+        const pieces = Array.from({ length: N }, () => ({
+          x: Math.random() * canvas.width,
+          y: Math.random() * -canvas.height,
+          w: 6 + Math.random() * 6,
+          h: 8 + Math.random() * 8,
+          color: colors[(Math.random() * colors.length) | 0],
+          vy: 2 + Math.random() * 3,
+          vx: -1.5 + Math.random() * 3,
+          rot: Math.random() * Math.PI,
+          vr: -0.15 + Math.random() * 0.3
+        }));
+
+        const start = performance.now();
+        const DURATION = 7000;
+
+        function frame(now) {
+          const elapsed = now - start;
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+          for (const p of pieces) {
+            p.x += p.vx;
+            p.y += p.vy;
+            p.rot += p.vr;
+
+            ctx.save();
+            ctx.translate(p.x, p.y);
+            ctx.rotate(p.rot);
+            
+            ctx.globalAlpha = elapsed > DURATION - 800 ? Math.max(0, (DURATION - elapsed) / 800) : 1;
+            ctx.fillStyle = p.color;
+            ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+            ctx.restore();
+          }
+
+          if (elapsed < DURATION) {
+            requestAnimationFrame(frame);
+          } else {
+            window.removeEventListener('resize', resize);
+            canvas.remove();
+          }
+        }
+        requestAnimationFrame(frame);
+      }
+
+      const pill = document.getElementById('pill-green');
+      if (pill) {
+        pill.addEventListener('click', () => {
+          const now = Date.now();
+          if (now - firstClick > 900) {
+            clicks = 0;
+            firstClick = now;
+          }
+          clicks++;
+          if (clicks >= 5) {
+            clicks = 0;
+            rainC();
+          }
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
