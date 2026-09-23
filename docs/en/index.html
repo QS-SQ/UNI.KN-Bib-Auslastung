@@ -753,7 +753,7 @@
     async function initDashboard() {
       try {
         const [lw, td, liveRes] = await Promise.all([
-          parseCSVFile('./temp/oc_values_lw.csv'), parseCSVFile('./temp/oc_values_today.csv'), fetch('./temp/oc_values.csv')
+          parseCSVFile('../temp/oc_values_lw.csv'), parseCSVFile('../temp/oc_values_today.csv'), fetch('../temp/oc_values.csv')
         ]);
         timeSeriesData.lw = lw; timeSeriesData.td = td;
         if (!liveRes.ok) throw new Error();
