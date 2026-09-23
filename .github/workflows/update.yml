@@ -9,10 +9,10 @@ env:
 on:
   repository_dispatch:
     types: [new-update]
-#  push:
-#    branches:
-#      - main
-#  workflow_dispatch: 
+  push:
+    branches:
+      - main
+  workflow_dispatch: 
 
 permissions:
   contents: read
