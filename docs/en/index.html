@@ -341,14 +341,14 @@
       box-shadow: var(--shadow);
     }
 
-    /* Optimiertes Verhalten für mobile Bildschirme */
+    /* Optimized behavior for mobile screens */
     @media (max-width: 768px) {
       .header-panel { 
         grid-template-columns: 1fr; 
         gap: 16px; 
       }
       
-      /* Blendet das Logo in der Handyansicht aus */
+      /* Hides the logo on mobile view */
       .panel-logo { 
         display: none; 
       }
@@ -360,7 +360,7 @@
         width: 100%;
       }
       
-      /* Button und Timestamp nebeneinander */
+      /* Button and timestamp side by side */
       .controls-row { 
         flex-direction: row-reverse; 
         justify-content: space-between; 
@@ -368,7 +368,7 @@
         gap: 12px;
       }
 
-      /* Optimierung für Legende und Methodik-Button */
+      /* Optimization for legend and methodology button */
       .footer-panel {
         flex-direction: column;
         align-items: stretch;
@@ -381,7 +381,7 @@
 
       .legend {
         display: flex;
-        justify-content: space-between; /* Drückt Farbpunkte nach links und Button nach rechts */
+        justify-content: space-between; /* Pushes color dots left and button right */
         align-items: center;
         width: 100%;
       }
@@ -399,13 +399,13 @@
     <header class="header-panel">
       <div class="header-left-content">
         <div class="title-wrapper">
-          <p class="eyebrow">Kommunikations-, Informations-, Medienzentrum (KIM)</p>
+          <p class="eyebrow">Communication, Information, Media Center (KIM)</p>
           <h1><span class="title-underline">Library usage at the University of Konstanz</span></h1>
         </div>
         
         <div class="global-status">
           <div class="global-info">
-            <span>Gesamtauslastung</span>
+            <span>Overall occupancy</span>
             <div id="total-trend" class="trend-box neutral">--</div>
           </div>
           <div class="progress-track" style="height: 6px; margin: 0;">
@@ -418,48 +418,48 @@
         <img src="logoUniKN.svg" alt="Logo" class="panel-logo">
         
         <div class="controls-row">
-          <button id="sort-button" class="sort-btn" onclick="cycleSort()">Sortierung: Standard</button>
-          <div id="update-time" class="header-timestamp">Aktualisiere...</div>
+          <button id="sort-button" class="sort-btn" onclick="cycleSort()">Sort: Default</button>
+          <div id="update-time" class="header-timestamp">Updating...</div>
         </div>
       </div>
     </header>
 
     <main id="live-dashboard" class="dashboard-grid">
-      <p style="color: var(--muted); padding: 12px;">Lade Daten...</p>
+      <p style="color: var(--muted); padding: 12px;">Loading data...</p>
     </main>
 
     <footer class="footer-panel">
       <div class="n-bib-info-box">
-        In der <strong>N-Bibliothek</strong> gibt es weitere 100 Arbeitsplätze.<br>
-        Öffnungszeiten N: Mo.–Fr. 8:00–17:30 Uhr (Aug./Sept. bis 16:30 Uhr).
+        The <strong>N Library</strong> has an additional 100 workspaces.<br>
+        N Library opening hours: Mon–Fri 8:00 AM–5:30 PM (Aug./Sept. until 4:30 PM).
       </div>
       
       <div class="legend">
-        <div class="legend-item" id="pill-green"><span class="dot" style="background: var(--green)"></span> gering</div>
-        <div class="legend-item"><span class="dot" style="background: var(--yellow)"></span> moderat</div>
-        <div class="legend-item"><span class="dot" style="background: var(--orange)"></span> stark</div>
-        <div class="legend-item"><span class="dot" style="background: var(--red)"></span> sehr stark</div>
-        <button class="methodik-btn" style="padding: 4px 10px; font-size: 0.75rem;" onclick="toggleMethodik()">Methodik</button>
+        <div class="legend-item" id="pill-green"><span class="dot" style="background: var(--green)"></span> low</div>
+        <div class="legend-item"><span class="dot" style="background: var(--yellow)"></span> moderate</div>
+        <div class="legend-item"><span class="dot" style="background: var(--orange)"></span> high</div>
+        <div class="legend-item"><span class="dot" style="background: var(--red)"></span> very high</div>
+        <button class="methodik-btn" style="padding: 4px 10px; font-size: 0.75rem;" onclick="toggleMethodik()">Methodology</button>
         <a href="../" class="methodik-btn" style="padding: 4px 10px; font-size: 0.75rem; text-decoration: none; display: inline-flex; align-items: center;">🇩🇪 Deutsch</a>
       </div>
     </footer>
 
     <div id="methodik-info">
-      Diese Seite zeigt eine geschätzte Auslastung der Arbeitsplätze der Bibliotheksbereiche der Universität Konstanz an. 
-      Dazu wird halbstündlich die Anzahl der eingeloggten Endgeräte in den WLAN-Routern erfasst. 
-      Daraus lässt sich die relative Auslastung abschätzen, die in einem Ampelsystem (geringe Auslastung bis sehr starke Auslastung) dargestellt wird. 
-      Eine Tendenz wie sich die Auslastung über die letze Stunde entwickelt hat lässt sich an den Pfeilen rechts oberhalb des Auslastungsbalkens ablesen.
-      Detailliertere Informationen zum Auslastungsverlauf sind durch Klick auf die jeweilge Kachel den Diagrammen zu jedem Bereich zu entnehmen.
-      Diese zeigen die Entwicklung der heutigen Auslastung im Vergleich zum selben Wochentag der Vorwoche. 
-      Die nur über die Bibliothek zugänglichen Seminarräume J213, BS217 und BG335 sowie die Computerpools sind von der Berechnung ausgenommen.
+      This page shows an estimated occupancy of the workspaces in the library areas of the University of Konstanz.
+      Every half hour, the number of devices logged into the WLAN routers is recorded.
+      This is used to estimate relative occupancy, which is displayed using a traffic-light system (from low to very high occupancy).
+      A trend showing how occupancy has developed over the past hour can be read from the arrows to the right, above the occupancy bar.
+      More detailed information on the occupancy history can be found in the charts for each area by clicking on the respective tile.
+      These charts show today's occupancy compared to the same weekday of the previous week.
+      Seminar rooms J213, BS217, and BG335, which are only accessible via the library, as well as the computer pools, are excluded from the calculation.
     </div>
 
   </div>
 
   <script>
     const orderKeys = ['BSGA','BG23', 'BG56', 'BSEA',  'BSBG','BSLS', 'JEAP', 'JGAR', 'INFO'];
-    const areaLabelMap = { 'INFO': 'Info-Zentrum', 'BG23': 'Ebenen BG2/BG3', 'BG56': 'Ebenen BG5/BG6', 'BSLS': 'Lesesaal (BS6-BG6)', 'BSBG': 'Übergang BS5-BG5', 'BSEA': 'Übergang BS2/3-BG2/3', 'BSGA': 'Buchbereich BS', 'JGAR': 'Arbeitsräume J', 'JEAP': 'Einzelarbeitsplätze J' };
-    const areaDescriptionMap = { 'INFO': '160 Arbeitsplätze im Infozentrum, Bibcafe und allen anderen Bereichen auf BA.', 'BG23': '145 Arbeitsplätze auf den Ebenen BG2/BG3 und BH2/BH3 (exkl. BG335).', 'BG56': '65 Einzelarbeitsplätze auf Ebene BG5 und Ebene BG6.', 'BSLS': '59 Arbeitsplätze im Lesesaal im Übergang von BS6 nach BG6.', 'BSBG': '5 Gruppenarbeitsräume im Übergang von BS5 nach BG5.', 'BSEA': '90 Arbeitsplätze in den Fluren von BS2/BS3 nach BG2/BG3 sowie an den großen Tischen auf BS3 in Richtung Übergang BG3.', 'BSGA': '165 Arbeitsplätze auf den Ebenen BS2 bis BS6 (exkl. BS217).', 'JGAR': '54 Arbeitsräume in J2-J6.', 'JEAP': '140 Einzelarbeitsplätze in J2-J6 (exkl. J213).' };
+    const areaLabelMap = { 'INFO': 'Info Center', 'BG23': 'Levels BG2/BG3', 'BG56': 'Levels BG5/BG6', 'BSLS': 'Reading room (BS6-BG6)', 'BSBG': 'Walkway BS5-BG5', 'BSEA': 'Walkway BS2/3-BG2/3', 'BSGA': 'Book area BS', 'JGAR': 'Study rooms J', 'JEAP': 'Individual workstations J' };
+    const areaDescriptionMap = { 'INFO': '160 workspaces in the Info Center, Bibcafe, and all other areas on BA.', 'BG23': '145 workspaces on levels BG2/BG3 and BH2/BH3 (excl. BG335).', 'BG56': '65 individual workstations on level BG5 and level BG6.', 'BSLS': '59 workspaces in the reading room in the walkway from BS6 to BG6.', 'BSBG': '5 group study rooms in the walkway from BS5 to BG5.', 'BSEA': '90 workspaces in the corridors from BS2/BS3 to BG2/BG3, as well as at the large tables on BS3 towards the BG3 walkway.', 'BSGA': '165 workspaces on levels BS2 to BS6 (excl. BS217).', 'JGAR': '54 study rooms in J2-J6.', 'JEAP': '140 individual workstations in J2-J6 (excl. J213).' };
 
     let currentSortMode = 'default';
     let timeSeriesData = { lw: {}, td: {} };
@@ -562,7 +562,7 @@
       return 'var(--green)';
     }
 
-    // Hilfsfunktion zum Generieren der Style- & Pfeilwerte
+    // Helper function to generate style & arrow values
     function getArrowProperties(indication) {
       let arrowStyle = `color: #94a3b8; font-size: 1.0rem; transform: rotate(0deg);`;
       if (indication === 2) {
@@ -596,7 +596,7 @@
     function renderDashboard() {
       const grid = document.getElementById('live-dashboard');
       
-      // Nutzt direkt die in Python vorbereiteten TOTAL-Werte für die Oberseite des Dashboards
+      // Uses the TOTAL values prepared directly in Python for the top of the dashboard
       if (totalRowData) {
         document.getElementById('total-bar').style.width = `${Math.min(totalRowData.percentage, 100)}%`;
         document.getElementById('total-bar').style.backgroundColor = getColor(totalRowData.percentage);
@@ -635,7 +635,7 @@
             </div>
 
             <div class="card-meta">
-              <span>Kapazität: ${row.seats} Plätze</span>
+              <span>Capacity: ${row.seats} seats</span>
               <div class="card-tabs">
                 <button class="tab-btn" id="tab-btn-chart-${row.key}" onclick="switchSubTab('${row.key}', 'chart', event)">
                   <svg viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6h-6z"/></svg>
@@ -665,9 +665,9 @@
 
     function cycleSort() {
       const btn = document.getElementById('sort-button');
-      if (currentSortMode === 'default') { currentSortMode = 'fullest'; btn.innerText = 'Sortierung: Vollste zuerst'; }
-      else if (currentSortMode === 'fullest') { currentSortMode = 'emptiest'; btn.innerText = 'Sortierung: Leerste zuerst'; }
-      else { currentSortMode = 'default'; btn.innerText = 'Sortierung: Standard'; }
+      if (currentSortMode === 'default') { currentSortMode = 'fullest'; btn.innerText = 'Sort: Fullest first'; }
+      else if (currentSortMode === 'fullest') { currentSortMode = 'emptiest'; btn.innerText = 'Sort: Emptiest first'; }
+      else { currentSortMode = 'default'; btn.innerText = 'Sort: Default'; }
       renderDashboard();
     }
 
@@ -714,7 +714,7 @@
           labels: labels,
           datasets: [
             { 
-              label: 'Heute', 
+              label: 'Today', 
               data: todayData, 
               borderColor: '#0f172a', 
               borderWidth: 2.5, 
@@ -725,7 +725,7 @@
               pointBorderColor: '#ffffff',
               pointBorderWidth: 1.5
             },
-            { label: 'Vorwoche', data: lastWeekData, borderColor: '#94a3b8', borderWidth: 1.5, borderDash: [4, 4], pointRadius: 0, tension: 0.15 }
+            { label: 'Last week', data: lastWeekData, borderColor: '#94a3b8', borderWidth: 1.5, borderDash: [4, 4], pointRadius: 0, tension: 0.15 }
           ]
         },
         options: {
@@ -775,7 +775,7 @@
             const timeMatch = v.match(/(\d{2}:\d{2})/);
             const timeOnly = timeMatch ? timeMatch[1] : v;
             
-            ts = `Stand: ${getFormattedShortDate()} - ${timeOnly} Uhr`;
+            ts = `As of: ${getFormattedShortDate()} - ${timeOnly}`;
             if (timeMatch) globalTimeString = timeMatch[1];
           } else {
             const pct = parseFloat(v);
@@ -792,10 +792,10 @@
           }
         });
 
-        document.getElementById('update-time').innerHTML = `<span class="status-dot"></span> ` + (ts || `Stand: ${getFormattedShortDate()}`);
+        document.getElementById('update-time').innerHTML = `<span class="status-dot"></span> ` + (ts || `As of: ${getFormattedShortDate()}`);
         renderDashboard();
       } catch (e) {
-        document.getElementById('live-dashboard').innerHTML = '<p style="color:var(--red); padding:12px;">Fehler beim Laden der Daten.</p>';
+        document.getElementById('live-dashboard').innerHTML = '<p style="color:var(--red); padding:12px;">Error loading data.</p>';
       }
     }
 
